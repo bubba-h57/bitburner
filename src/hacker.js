@@ -24,38 +24,46 @@ export async function main(ns) {
   );
 
   hosts = servers.filter(
-    (server) => server.purchasedByPlayer || server.hostname === "home"
+    (server) =>
+      server.purchasedByPlayer ||
+      server.hostname === "home" ||
+      (server.hasAdminRights && server.maxRam > 0)
   );
 
   // kill all instances of the hack script, regardless of arguments
   hosts.forEach((server) => ns.scriptKill("hack.js", server.hostname));
   await ns.sleep(2000);
 
-  // Now we will crank 'em all back up
+  // Now we will crank 'em all
   for (let n = 0; n < hosts.length; n++) {
     let host = hosts[n].hostname;
     let server = ns.getServer(host);
-    let threads = 2000;
-    let invThreads = 500;
+    let possibleThreads = Math.ceil(
+      (server.maxRam * 0.9 - server.ramUsed) / scriptRamCost
+    );
+    let threads = Math.ceil(possibleThreads / targets.length);
+    let totalThreads = 0;
 
     ns.scriptKill("hack.js", host);
     ns.tprintf("Setting up hacks on: " + host);
 
     if (host !== "home") {
-      threads = invThreads;
       await ns.scp(
         ["hack.js", "/lib/helpers.js", "/lib/term.js"],
         "home",
         host
       );
     }
-    while (
-      server.maxRam * 0.9 - server.ramUsed > scriptRamCost &&
-      i !== targets.length
-    ) {
-      await ns.exec("hack.js", host, threads, targets[i].hostname);
+    let keepRunning = totalThreads <= possibleThreads;
 
-      server = ns.getServer(host);
+    while (keepRunning) {
+      if (ns.isRunning("hack.js", host, targets[i].hostname)) {
+        break;
+      }
+
+      await ns.exec("hack.js", host, threads, targets[i].hostname);
+      totalThreads += threads;
+      keepRunning = totalThreads <= possibleThreads;
       i++;
       if (i === targets.length) i = 0;
       await ns.sleep(800);
