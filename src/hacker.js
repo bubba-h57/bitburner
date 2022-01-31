@@ -27,15 +27,22 @@ export async function main(ns) {
     (server) => server.purchasedByPlayer || server.hostname === "home"
   );
 
+  // kill all instances of the hack script, regardless of arguments
+  hosts.forEach((server) => ns.scriptKill("hack.js", server.hostname));
+  await ns.sleep(2000);
+
+  // Now we will crank 'em all back up
   for (let n = 0; n < hosts.length; n++) {
     let host = hosts[n].hostname;
     let server = ns.getServer(host);
+    let threads = 2000;
+    let invThreads = 500;
 
-    // kill all instances of the hack script, regardless of arguments
     ns.scriptKill("hack.js", host);
     ns.tprintf("Setting up hacks on: " + host);
 
     if (host !== "home") {
+      threads = invThreads;
       await ns.scp(
         ["hack.js", "/lib/helpers.js", "/lib/term.js"],
         "home",
@@ -46,7 +53,7 @@ export async function main(ns) {
       server.maxRam * 0.9 - server.ramUsed > scriptRamCost &&
       i !== targets.length
     ) {
-      await ns.exec("hack.js", host, 500, targets[i].hostname);
+      await ns.exec("hack.js", host, threads, targets[i].hostname);
 
       server = ns.getServer(host);
       i++;
