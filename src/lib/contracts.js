@@ -106,7 +106,7 @@ export const contractWorkers = [
       for (let reach = 0; i < n && i <= reach; ++i) {
         reach = Math.max(i + data[i], reach);
       }
-      return i === n;
+      return i;
     },
   },
   {
