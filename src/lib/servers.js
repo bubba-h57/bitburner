@@ -63,11 +63,17 @@ export function factionServers() {
   ];
 }
 
-export async function findPath(ns) {
-  let destination = ns.args[0];
+/**
+ *
+ * @param {import("../").NS} ns
+ * @param {string} destination
+ * @returns
+ */
+export async function findPath(ns, destination = "", current = "home") {
   let hostname;
   let pathToHostname = [];
-  let links = { home: "" };
+  let links = {};
+  links[current] = "";
   let queue = Object.keys(links);
 
   while ((hostname = queue.shift())) {
@@ -89,4 +95,74 @@ export async function findPath(ns) {
   }
 
   return pathToHostname;
+}
+
+/**
+ *
+ * @param {import("../").NS} ns
+ * @param {import("../").Server} server
+ */
+export async function pushHackScripts(ns, server) {
+  if (server.hostname === "home") {
+    return;
+  }
+  await ns.scp(
+    ["hack.js", "/lib/helpers.js", "/lib/term.js"],
+    "home",
+    server.hostname
+  );
+}
+
+/**
+ *
+ * @param {import("../").Server} server
+ * @param {number} scriptCost
+ * @param {number} mumberOfTargets
+ * @returns {Object}
+ */
+export function getThreadInfo(server, scriptCost, mumberOfTargets) {
+  let targRam = getTargetRam(server);
+  let possible = targRam / scriptCost;
+  return {
+    possible: possible,
+    target: Math.ceil(possible / mumberOfTargets),
+    total: 0,
+  };
+}
+
+/** @param {import("../").Server } server */
+export function getTargetRam(server) {
+  return server.hostname === "home" ? server.maxRam * 0.8 : server.maxRam;
+}
+
+/**
+ *
+ * @param {import("../").NS} ns
+ * @returns {import("../").Server[]}
+ */
+export function getTargets(ns) {
+  let servers = getServerInfo(ns).filter(
+    (server) =>
+      server.hasAdminRights &&
+      server.requiredHackingSkill <= ns.getHackingLevel() &&
+      server.moneyMax > 0
+  );
+  servers.sort((a, b) => b.moneyMax - a.moneyMax);
+  return servers;
+}
+
+/**
+ *
+ * @param {import("../").NS} ns
+ * @returns {import("../").Server[]}
+ */
+export function getHosts(ns) {
+  let servers = getServerInfo(ns).filter(
+    (server) =>
+      server.purchasedByPlayer ||
+      server.hostname === "home" ||
+      (server.hasAdminRights && server.maxRam > 0)
+  );
+  servers.sort((a, b) => b.maxRam - a.maxRam);
+  return servers;
 }

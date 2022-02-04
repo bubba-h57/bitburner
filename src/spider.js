@@ -22,7 +22,7 @@ export async function main(ns) {
     return findBackdoors(servers, ns.getHackingLevel());
   }
 
-  orderDefault(servers);
+  orderDefault(ns, servers);
 }
 
 /**
@@ -30,14 +30,16 @@ export async function main(ns) {
  *
  * @param {import(".").Server[] } servers
  */
-function orderDefault(servers) {
+function orderDefault(ns, servers) {
   servers
     .sort(function (a, b) {
       let aHostname = a.hostname.toUpperCase();
       let bHostname = b.hostname.toUpperCase();
       return aHostname < bHostname ? -1 : aHostname > bHostname ? 1 : 0;
     })
-    .forEach((server) => writeOutFixedLength("  - " + server.hostname));
+    .forEach((server) =>
+      ns.print("  - " + server.hostname + "\t\t" + server.organizationName)
+    );
 }
 
 /**

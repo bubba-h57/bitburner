@@ -1,13 +1,17 @@
 import { getAllServers } from "lib/servers.js";
 import { contractWorkers } from "lib/contracts.js";
+import { Logger } from "lib/logger.js";
 
 /** @param {import(".").NS } ns */
-export function main(ns) {
+export async function main(ns) {
   const servers = getAllServers(ns, "home");
-  let hostnameLength = 0;
-  let contractLength = 0;
+  let hostnameLength = 20;
+  let contractLength = 35;
   let contractTypeLength = 0;
   let contracts = [];
+
+  /** @type {import("./lib/logger").Logger} */
+  let logger = await new Logger(ns, "/logs/contracts.txt");
 
   servers.forEach(function (hostname) {
     ns.ls(hostname, ".cct").forEach(function (contract) {
@@ -24,17 +28,19 @@ export function main(ns) {
     });
   });
 
-  ns.tprintf(`Found ${contracts.length} contracts.`);
-  contracts.forEach(async function (contract) {
-    let solution = await solve(contract, ns);
+  for (let index = 0; index < contracts.length; index++) {
+    let solution = await solve(contracts[index], ns);
+    let result = solution !== "" ? "  SOLVED" : "UNSOLVED";
     let output = [
-      contract.hostname.padEnd(hostnameLength + 3, " ") +
-        contract.filename.padEnd(contractLength + 3, " ") +
-        contract.type.padEnd(contractTypeLength + 3, " "),
+      contracts[index].hostname.padEnd(hostnameLength + 3, " "),
+      result.padEnd(3, " "),
+      contracts[index].filename.padEnd(contractLength + 3, " "),
+      contracts[index].type.padEnd(contractTypeLength + 3, " "),
       solution,
     ].join("");
-    ns.tprintf(output);
-  });
+
+    await logger.write(output);
+  }
 }
 
 function compareNumbers(original, challenger) {

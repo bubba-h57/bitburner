@@ -23,7 +23,6 @@ export async function openPorts(ns, hostname) {
   porthacks.forEach(async function (hack) {
     ns.disableLog(hack.apiCall);
     if (ns.fileExists(hack.filename)) {
-      ns.print("Hacking " + hack.message + " on " + hostname);
       await ns[hack.apiCall](hostname);
     }
   });

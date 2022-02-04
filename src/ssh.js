@@ -2,7 +2,7 @@ import { findPath } from "lib/servers.js";
 
 /** @param {import(".").NS } ns */
 export async function main(ns) {
-  let path = await findPath(ns);
+  let path = await findPath(ns, ns.args[0]);
   let output = "home;";
 
   path.forEach((hostname) => (output += " connect " + hostname + ";"));

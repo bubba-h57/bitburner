@@ -1,10 +1,12 @@
 import { out, hasFlag } from "lib/term.js";
-import { getServerInfo } from "lib/servers.js";
+import { getServerInfo, findPath } from "lib/servers.js";
 import { portsWeCanHack, openPorts } from "lib/ports.js";
 
 /** @param {import(".").NS } ns */
 export async function main(ns) {
-  ns.disableLog("disableLog");
+  ns.disableLog("ALL");
+  ns.enableLog("installBackdoor");
+  ns.tail();
   let servers = getServerInfo(ns);
 
   if (hasFlag(ns, "--ports")) {
@@ -17,9 +19,11 @@ export async function main(ns) {
   servers.forEach(async (server) => await openPorts(ns, server.hostname));
   servers = getServerInfo(ns);
 
-  servers.forEach(async function (server) {
+  //servers.forEach(async function (server) {
+  for (let i = 0; i < servers.length; i++) {
+    let server = servers[i];
     if (server.purchasedByPlayer || server.hostname === "home") {
-      return;
+      continue;
     }
 
     if (
@@ -28,6 +32,7 @@ export async function main(ns) {
     ) {
       out(`<span style="color: red;">Nuking ${server.hostname}</span>`);
       await ns.nuke(server.hostname);
+      server = ns.getServer(server.hostname);
     }
 
     if (server.hasAdminRights) {
@@ -35,11 +40,14 @@ export async function main(ns) {
         !server.backdoorInstalled &&
         server.requiredHackingSkill <= ns.getHackingLevel()
       ) {
-        out(
-          `<span style="color: orange;">${server.hostname} needs a backdoor installed.</span>`
-        );
+        let path = await findPath(ns, server.hostname);
+        path.forEach((host) => ns.connect(host));
+        await ns.installBackdoor();
+        path.pop();
+        path.reverse();
+        path.push("home");
+        path.forEach((host) => ns.connect(host));
       }
-      return;
     }
-  });
+  }
 }
