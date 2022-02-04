@@ -19,7 +19,6 @@ export async function main(ns) {
   servers.forEach(async (server) => await openPorts(ns, server.hostname));
   servers = getServerInfo(ns);
 
-  //servers.forEach(async function (server) {
   for (let i = 0; i < servers.length; i++) {
     let server = servers[i];
     if (server.purchasedByPlayer || server.hostname === "home") {
@@ -31,10 +30,13 @@ export async function main(ns) {
       !server.hasAdminRights
     ) {
       out(`<span style="color: red;">Nuking ${server.hostname}</span>`);
-      await ns.nuke(server.hostname);
+      ns.nuke(server.hostname);
       server = ns.getServer(server.hostname);
     }
+  }
 
+  for (let i = 0; i < servers.length; i++) {
+    let server = servers[i];
     if (server.hasAdminRights) {
       if (
         !server.backdoorInstalled &&
