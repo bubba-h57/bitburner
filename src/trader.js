@@ -111,6 +111,7 @@ export async function main(ns) {
   ns.disableLog("ALL");
   ns.enableLog("stock.buy");
   ns.enableLog("stock.sell");
+  ns.tail();
   //ns.atExit(sell_everything(ns));
   ns.clearLog();
   ns.print("Loading...");

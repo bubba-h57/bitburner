@@ -32,9 +32,9 @@ export async function main(ns) {
   // Minimum RAM, in Gigabytes
   const MIN_RAM = 32000;
   // Target RAM for server is "Home" RAM, divided by SVR_RAM_RATIO, must = power of 2
-  const SVR_RAM_RATIO = 2;
+  const SVR_RAM_RATIO = 1;
   let currentServers = ns.getPurchasedServers();
-  let ram = 512;
+  let ram = 1048576;
 
   // Server purchase info
   const serverPriceInfoText = humanReadableNumbers(

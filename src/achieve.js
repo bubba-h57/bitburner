@@ -11,16 +11,12 @@ let hasPlayer = (obj) => {
 /** @param {NS} ns **/
 export async function main(ns) {
   //document.achievements.push("UNACHIEVABLE");
-  //document.bubbahack = "foobar";
-  // ns.tprint(document);
   let boxes = Array.from(
     eval("document").querySelectorAll("[class*=MuiBox-root]")
   );
   let box = boxes.find((x) => hasPlayer(x));
 
   if (box) {
-    ns.tprintf('INFO className: "' + box.className + '"');
-
     let props = getProps(box);
 
     // get a 10% cash bonus

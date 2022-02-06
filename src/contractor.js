@@ -30,7 +30,7 @@ export async function main(ns) {
 
   for (let index = 0; index < contracts.length; index++) {
     let solution = await solve(contracts[index], ns);
-    let result = solution !== "" ? "  SOLVED" : "UNSOLVED";
+    let result = solution !== "" ? "  SOLVED   " : "UNSOLVED   ";
     let output = [
       contracts[index].hostname.padEnd(hostnameLength + 3, " "),
       result.padEnd(3, " "),
