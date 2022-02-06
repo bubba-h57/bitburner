@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"bitburner.scriptRoot": "./src",
+		"bitburner.scriptRoot": "./build",
 		"bitburner.fileWatcher.enable": true,
 		"bitburner.showPushSuccessNotification": true,
 		"bitburner.showFileWatcherEnabledNotification": true,
