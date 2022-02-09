@@ -1,10 +1,10 @@
-import {NS} from "Bitburner";
-import { out, hasFlag } from "./lib/Term.js";
+import { NS } from "Bitburner";
+import { out, hasFlag } from "/lib/Term.js";
 import { getServerInfo, findPath } from "/lib/Servers.js";
 import { portsWeCanHack, openPorts } from "/lib/Ports.js";
 
 /** @param { NS } ns */
-export async function main(ns:NS) {
+export async function main(ns: NS) {
   ns.disableLog("ALL");
   ns.enableLog("installBackdoor");
   ns.tail();
@@ -17,7 +17,9 @@ export async function main(ns:NS) {
     ) + "</span>";
   }
 
-  servers.forEach(async (server: { hostname: any; }) => await openPorts(ns, server.hostname));
+  servers.forEach(
+    async (server: { hostname: any }) => await openPorts(ns, server.hostname)
+  );
   servers = getServerInfo(ns);
 
   for (let i = 0; i < servers.length; i++) {

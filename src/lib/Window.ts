@@ -1,42 +1,36 @@
+import type React_Type from "react";
+import { NS } from "Bitburner";
+
 /** Alias for document to prevent excessive RAM use */
-const doc = eval("document");
+const doc = eval("document") as Document;
+var React: typeof React_Type;
 
 /**
  * Returns the full command line for the current process, which is also the title of the tail modal
  */
-export function getCommandLine(ns) {
+export function getCommandLine(ns: NS) {
   return ns.getScriptName() + " " + ns.args.join(" ");
 }
 
 /**
  * Tries to find the tail modal for this process
  */
-export function getTailModal(ns) {
+export function getTailModal(ns: NS) {
   const commandLine = getCommandLine(ns);
   const modals = doc.querySelectorAll(`.drag > h6`);
-  if (modals === undefined) {
-    return false;
-  }
   const tailTitleEl = Array.from(modals).find((x) =>
-    x.textContent.includes(commandLine)
+    x.textContent!.includes(commandLine)
   );
-  if (tailTitleEl === undefined) {
-    return false;
-  }
-
-  return tailTitleEl.parentElement.parentElement.nextSibling;
+  return tailTitleEl?.parentElement!.parentElement!.nextSibling;
 }
 
-export function getDoc() {
-  return doc;
-}
 /**
  * Creates a custom container inside a tail modal to use for rendering custom DOM.
  * If the container has already been created, the existing container will be returned.
  */
-export function getCustomModalContainer(ns) {
+export function getCustomModalContainer(ns: NS): HTMLDivElement | undefined {
   const id = getCommandLine(ns).replace(/[^\w\.]/g, "_");
-  let containerEl = doc.getElementById(id);
+  let containerEl = doc.getElementById(id) as HTMLDivElement | null;
   if (!containerEl) {
     const modalEl = getTailModal(ns);
     if (!modalEl) {
@@ -70,7 +64,7 @@ export function getCustomModalContainer(ns) {
  *   </div>
  * );
  */
-export default function renderCustomModal(ns, element) {
+export default function renderCustomModal(ns: NS, element: React.ReactElement) {
   const container = getCustomModalContainer(ns);
   if (!container) {
     return;
@@ -92,10 +86,10 @@ export default function renderCustomModal(ns, element) {
  * await eventQueue.executeEvents();
  */
 export class EventHandlerQueue {
-  queue = [];
+  private queue: (() => void | Promise<unknown>)[] = [];
 
-  wrap(...args) {
-    return (...args) => {
+  public wrap<T extends (...args: any[]) => any>(fn: T) {
+    return (...args: Parameters<T>) => {
       if (
         args[0] &&
         typeof args[0] === "object" &&
@@ -107,7 +101,7 @@ export class EventHandlerQueue {
     };
   }
 
-  async executeEvents() {
+  public async executeEvents() {
     const events = this.queue;
     this.queue = [];
     for await (const event of events) {
@@ -128,72 +122,10 @@ export class EventHandlerQueue {
  *     }
  * `} />
  */
-export function css(parts, ...params) {
+export function css(parts: TemplateStringsArray, ...params: any[]): string {
   let result = parts[0];
   for (let i = 1; i < parts.length; i++) {
     result += params[i - 1] + parts[i];
   }
   return result;
 }
-let dom = `<div>
-    <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 jss720 css-1cryup1"
-      style="cursor: grab"
-    >
-      <div class="drag MuiBox-root css-70qvj9">
-        <h6
-          class="MuiTypography-root MuiTypography-h6 css-iugqqm"
-          title="sudo.js "
-        >
-          sudo.js
-        </h6>
-        <div class="MuiBox-root css-1g4x5kn">
-          ><button
-            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-oku50o"
-            tabindex="0"
-            type="button"
-          >
-            🗕<span class="MuiTouchRipple-root css-w0pj6f"></span></button
-          ><button
-            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-oku50o"
-            tabindex="0"
-            type="button"
-          >
-            X<span class="MuiTouchRipple-root css-w0pj6f"></span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1i71esb"
-    >
-      <div class="jss721 react-resizable" style="width: 929px; height: 658px">
-        <div class="MuiBox-root css-0">
-          <p class="MuiTypography-root MuiTypography-body1 jss724 css-eezd29">
-            &lt;span style="color: orange;"&gt;stormtech needs a backdoor
-            installed.&lt;/span&gt;<br />
-          </p>
-          <p class="MuiTypography-root MuiTypography-body1 jss724 css-eezd29">
-            Script finished running<br />
-          </p>
-        </div>
-        <span
-          style="
-            position: absolute;
-            right: -10px;
-            bottom: -13px;
-            cursor: nw-resize;
-          "
-          ><svg
-            class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-wiqtx0"
-            focusable="false"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            data-testid="ArrowForwardIosIcon"
-            style="transform: rotate(45deg)"
-          >
-            <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path></svg
-        ></span>
-      </div>
-    </div>
-  </div>`;

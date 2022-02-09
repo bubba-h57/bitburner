@@ -122,10 +122,28 @@ export async function pushHackScripts(
     return;
   }
   await ns.scp(
-    ["hack.js", "/lib/helpers.js", "/lib/term.js"],
+    ["/bin/hack.js", "/lib/Helpers.js", "/lib/Term.js"],
     "home",
     server.hostname
   );
+}
+
+export class ThreadInfo {
+  possible: number;
+  target: number;
+  total: number;
+  constructor(possible: number, target: number, total: number) {
+    this.possible = possible;
+    this.target = target;
+    this.total = total;
+  }
+  hasRoom(): boolean {
+    return this.total <= this.target;
+  }
+
+  incrementTotal() {
+    this.total += this.target;
+  }
 }
 
 /**
@@ -133,20 +151,16 @@ export async function pushHackScripts(
  * @param {Server} server
  * @param {number} scriptCost
  * @param {number} mumberOfTargets
- * @returns {Object}
+ * @returns {ThreadInfo}
  */
 export function getThreadInfo(
   server: any,
   scriptCost: number,
   mumberOfTargets: number
-): object {
+): ThreadInfo {
   let targRam = getTargetRam(server);
   let possible = targRam / scriptCost;
-  return {
-    possible: possible,
-    target: Math.ceil(possible / mumberOfTargets),
-    total: 0,
-  };
+  return new ThreadInfo(possible, Math.ceil(possible / mumberOfTargets), 0);
 }
 
 /** @param {Server } server */

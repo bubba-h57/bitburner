@@ -12,7 +12,8 @@
       "outDir": "build/",
       "moduleResolution": "node",
       "strictNullChecks": true,
-      "strictPropertyInitialization": true
+      "strictPropertyInitialization": true,
+      "allowSyntheticDefaultImports": true
     },
     "include": ["src/**/*"]
   }

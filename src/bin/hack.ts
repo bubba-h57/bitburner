@@ -1,5 +1,5 @@
-import { NS} from "Bitburner";
-import { humanReadableNumbers } from "lib/Helpers.js";
+import { NS } from "Bitburner";
+import { humanReadableNumbers } from "/lib/Helpers.js";
 
 /** @param {NS } ns */
 export async function main(ns: NS) {

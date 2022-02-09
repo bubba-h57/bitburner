@@ -8,7 +8,7 @@
  * @param number decimalPoints - Optional. Number of digits after the decimal point.
  * @returns Returns a string.
  */
-export function humanReadableNumbers(num, decimalPoints = 3) {
+export function humanReadableNumbers(num: number, decimalPoints = 3) {
   const lookup = [
     { value: 1, symbol: "" },
     { value: 1e3, symbol: "K" },
@@ -54,7 +54,11 @@ export function humanReadableNumbers(num, decimalPoints = 3) {
  * @param number dp - Optional. Number of digits after the decimalPoint
  * @returns Returns a string.
  */
-export function humanReadableByteSize(bytes, size = false, decimalPoints = 1) {
+export function humanReadableByteSize(
+  bytes: number,
+  size = false,
+  decimalPoints = 1
+) {
   const thresh = size ? 1000 : 1024;
 
   if (Math.abs(bytes) < thresh) {

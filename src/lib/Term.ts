@@ -22,13 +22,13 @@ export function out(message: string) {
   ].join("");
 
   const list = document.getElementById("terminal");
-  list.insertAdjacentHTML("beforeend", output);
+  list?.insertAdjacentHTML("beforeend", output);
 }
 
 /**
  * Determines if a flag exists in the script arguments.
  *
- * @param {import("../").NS} ns
+ * @param {NS} ns
  * @param {string} flag
  * @returns
  */

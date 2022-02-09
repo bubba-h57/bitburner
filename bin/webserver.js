@@ -18,7 +18,8 @@ var WebServer = function (configuration) {
         '.woff': 'font/woff',
         '.ttf': 'font/ttf',
         '.eot': 'font/eot',
-        '.svg': 'image/svg+xml'
+        '.svg': 'image/svg+xml',
+        '.json': 'application/json'
     };
     this.config = configuration || {
         port: null,
@@ -51,7 +52,7 @@ WebServer.prototype.log = function (message) {
 
 WebServer.prototype.start = function () {
     var self = this;
-    self.log('Server configuration : \n' + JSON.stringify(self.config));
+    console.log('Server configuration : \n' + JSON.stringify(self.config));
     if (self.config.cors) {
         this.enableCORS();
     }
@@ -83,7 +84,7 @@ WebServer.prototype.start = function () {
                 res.end();
             }
         });
-        self.log("Remote connection from: " + req.connection.remoteAddress + " requesting file " + requestedFile);
+        console.log("Remote connection from: " + req.socket.remoteAddress + " requesting file " + requestedFile);
     }).listen(self.config.port, function () {
         console.log("Node Webserver running at port", self.config.port);
     });

@@ -1,4 +1,4 @@
-import {NS} from "Bitburner";
+import { NS } from "Bitburner";
 
 export class Logger {
   /** @type {CallableFunction[]} */
@@ -25,26 +25,26 @@ export class Logger {
      * @param {NS } ns
      * @param {string} message
      */
-    this.writers.push(async function (ns: { print: (arg0: any) => any; }, message: any, name: any) {
-      await ns.print(message);
+    this.writers.push(async function (ns: NS, message: any, name: any) {
+      ns.print(message);
     });
 
     /**
      * @param {NS } ns
      * @param {string} message
      */
-    this.writers.push(async function (ns: { tprint: (arg0: any) => any; }, message: any, name: any) {
-      await ns.tprint(message);
+    this.writers.push(async function (ns: NS, message: any, name: any) {
+      ns.tprint(message);
     });
 
     /**
      * @param {NS } ns
      * @param {string} message
      */
-    this.writers.push(async function (ns: { write: (arg0: any, arg1: string, arg2: string) => any; }, message: string, name: any) {
+    this.writers.push(async function (ns: NS, message: string, name: any) {
       await ns.write(
         name,
-        new Date().toISOString() + "   " + message + "\n",
+        [new Date().toISOString() + "   " + message + "\n"],
         "a"
       );
     });

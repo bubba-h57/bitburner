@@ -1,5 +1,5 @@
 import { NS} from "Bitburner";
-import { humanReadableNumbers, humanReadableByteSize } from "./lib/Helpers";
+import { humanReadableNumbers, humanReadableByteSize } from "/lib/Helpers";
 
 /** @param NS } ns */
 export async function main(ns: NS) {
