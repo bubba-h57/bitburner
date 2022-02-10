@@ -1,15 +1,15 @@
 import { NS} from "Bitburner";
+
 /** @param {NS} ns **/
 export async function main(ns: NS) {
   ns.disableLog("ALL");
   ns.tail();
-  var karma = ns.heart.break();
 
   while (true) {
-    karma = ns.heart.break();
+    let karma = ns.extra.heart.break();
 
     ns.clearLog();
-    ns.print("Current Karma : ", karma);
+    ns.print(`Current Karma: ${karma}`);
     await ns.sleep(250);
   }
 }
