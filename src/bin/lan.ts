@@ -1,6 +1,8 @@
-import { NS} from "Bitburner";
-import { humanReadableNumbers } from "lib/Helpers.js";
-import { getTargets, getThreadInfo, pushHackScripts } from "lib/Servers.js";
+import { NS, Server } from "Bitburner";
+import { humanReadableNumbers } from "/lib/Helpers.js";
+import { getTargets, getThreadInfo, pushHackScripts } from "/lib/Servers.js";
+
+
 /** @param {NS } ns */
 export async function main(ns:NS) {
   let memMap = [
@@ -34,6 +36,7 @@ export async function main(ns:NS) {
   const MIN_RAM = 32000;
   // Target RAM for server is "Home" RAM, divided by SVR_RAM_RATIO, must = power of 2
   const SVR_RAM_RATIO = 1;
+  const hackScript = "/bin/hack.js"
   let currentServers = ns.getPurchasedServers();
   let ram = 1048576;
 
@@ -58,31 +61,25 @@ export async function main(ns:NS) {
       ns.print(`Server ${hostname} was purchased.`);
       ++index;
 
-      /** @type {import(".").Server[]} */
-      let targets = getTargets(ns);
+      let targets: Server[] = getTargets(ns);
       let i = 0;
-      let scriptRamCost = ns.getScriptRam("hack.js");
+      let scriptRamCost = ns.getScriptRam(hackScript);
       let server = ns.getServer(hostname);
       let threads = getThreadInfo(server, scriptRamCost, targets.length);
+
       await pushHackScripts(ns, server);
-      let keepRunning = threads.total <= threads.possible;
-      while (keepRunning) {
-        if (ns.isRunning("hack.js", server.hostname, targets[i].hostname)) {
+
+      while (threads.hasRoom()) {
+        if (ns.isRunning(hackScript, server.hostname, targets[i].hostname)) {
           ns.print(
             "WARN " + server.hostname + " looped around to repeate targets."
           );
           break;
         }
 
-        ns.exec(
-          "hack.js",
-          server.hostname,
-          threads.target,
-          targets[i].hostname
-        );
+        ns.exec(hackScript, server.hostname, threads.numberOfThreadsToRun, targets[i].hostname);
 
-        threads.total += threads.target;
-        keepRunning = threads.total <= threads.possible;
+        threads.incrementTotal();
         i++;
         if (i === targets.length) i = 0;
         await ns.sleep(300);
