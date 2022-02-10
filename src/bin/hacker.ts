@@ -30,7 +30,7 @@ export async function main(ns: NS) {
 
     await pushHackScripts(ns, server);
 
-    while (threads.hasRoom) {
+    while (threads.hasRoom()) {
       if (ns.isRunning(hackScript, server.hostname, targets[i].hostname)) {
         ns.print(
           "WARN " + server.hostname + " looped around to repeat targets."
@@ -38,7 +38,7 @@ export async function main(ns: NS) {
         break;
       }
 
-      ns.exec(hackScript, server.hostname, threads.target, targets[i].hostname);
+      ns.exec(hackScript, server.hostname, threads.numberOfThreadsToRun, targets[i].hostname);
 
       threads.incrementTotal();
       i++;
