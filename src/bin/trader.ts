@@ -1,12 +1,22 @@
+import { NS } from "Bitburner";
+
 const bitnode8 = false; // can you short stocks?
 const narrow_display = false;
 
 class Stock {
-  constructor(symbol) {
+  symbol: string;
+  maxShares: number;
+  askPrice: number;
+  bidPrice: number;
+  forecast: number;
+  position: { long: number; longprice: number; short: number; shortprice: number; };
+  deviation: number;
+
+  constructor(symbol: string) {
     this.symbol = symbol;
     this.maxShares = 0;
-    this.askPrice;
-    this.bidPrice;
+    this.askPrice = 0;
+    this.bidPrice = 0;
     this.forecast = 0.5;
     this.position = {
       long: 0,
@@ -14,9 +24,10 @@ class Stock {
       short: 0,
       shortprice: 0,
     };
+    this.deviation = 0;
   }
-  /** @param {import(".").NS } ns */
-  update(ns) {
+
+  update(ns: NS) {
     this.maxShares = ns.stock.getMaxShares(this.symbol);
     this.askPrice = ns.stock.getAskPrice(this.symbol);
     this.bidPrice = ns.stock.getBidPrice(this.symbol);
@@ -36,18 +47,18 @@ class Stock {
       this.deviation = this.forecast;
     }
   }
-  /** @param {import(".").NS } ns */
-  coverShort(ns) {
+
+  coverShort(ns: NS) {
     return ns.stock.sellShort(this.symbol, 1000000000000000);
     // this.cancelOrders(ns)
   }
-  /** @param {import(".").NS } ns */
-  sellLong(ns) {
+
+  sellLong(ns: NS) {
     return ns.stock.sell(this.symbol, 1000000000000000);
     // this.cancelOrders(ns)
   }
-  /** @param {import(".").NS } ns */
-  buyLong(ns) {
+
+  buyLong(ns: NS) {
     this.askPrice = ns.stock.getAskPrice(this.symbol);
     let shares = (ns.getServerMoneyAvailable("home") - 100000) / this.askPrice;
     shares = Math.min(this.maxShares - this.position.long, shares);
@@ -58,8 +69,8 @@ class Stock {
     // ns.stock.placeOrder(this.symbol, shares, price * .9, "Stop Sell Order", "L");
     // ns.stock.placeOrder(this.symbol, shares, price * 2, "Limit Sell Order", "L");
   }
-  /** @param {import(".").NS } ns */
-  buyShort(ns) {
+
+  buyShort(ns: NS) {
     this.bidPrice = ns.stock.getBidPrice(this.symbol);
     let shares = (ns.getServerMoneyAvailable("home") - 100000) / this.bidPrice;
     shares = Math.min(this.maxShares - this.position.short, shares);
@@ -71,15 +82,15 @@ class Stock {
     // ns.stock.placeOrder(this.symbol, shares, price * .7, "Limit Sell Order", "S");
   }
 }
-/** @param {import(".").NS } ns */
-function scan(ns) {
+
+function scan(ns: NS) {
   let tickers = ns.stock.getSymbols();
-  let stock_list = [];
+  let stock_list: Stock[]= [];
   tickers.forEach((s) => stock_list.push(new Stock(s)));
   return stock_list;
 }
-/** @param {import(".").NS } ns */
-function sell_everything(ns) {
+
+function sell_everything(ns: NS) {
   let stox = scan(ns);
   for (let stock of stox) {
     stock.update(ns);
@@ -98,8 +109,8 @@ function sell_everything(ns) {
     }
   }
 }
-/** @param {import(".").NS } ns */
-export async function main(ns) {
+
+export async function main(ns: NS) {
   /*
 	Automatically manages the stock market. Requires Stock Market API TIX upgrade.
 	*/
@@ -152,7 +163,7 @@ export async function main(ns) {
 
     if (narrow_display) {
       ns.print("-".padStart(10, "-"));
-      ns.print("TICK".padStart(5), "%".padStart(5));
+      ns.print("TICK".padStart(5) + "%".padStart(5));
       ns.print("-".padStart(10, "-"));
       for (let stock of stocks) {
         stock.update(ns);
@@ -165,9 +176,8 @@ export async function main(ns) {
           -1;
 
         ns.print(
-          stock.symbol.padStart(5),
-          ns
-            .nFormat(
+          stock.symbol.padStart(5) +
+          ns.nFormat(
               (stock.position.long - stock.position.short) / stock.maxShares,
               "0%"
             )
@@ -179,9 +189,9 @@ export async function main(ns) {
     } else {
       ns.print("-".padStart(40, "-"));
       ns.print(
-        "TICKER".padStart(10),
-        "PRICE".padStart(10),
-        "FORECAST".padStart(10),
+        "TICKER".padStart(10) +
+        "PRICE".padStart(10) +
+        "FORECAST".padStart(10) +
         "POSITION".padStart(10)
       );
       ns.print("-".padStart(40, "-"));
@@ -196,9 +206,9 @@ export async function main(ns) {
           -1;
 
         ns.print(
-          stock.symbol.padStart(10),
-          ns.nFormat(stock.askPrice, "0.00a").padStart(10),
-          ns.nFormat(stock.forecast, ".000").padStart(10),
+          stock.symbol.padStart(10) +
+          ns.nFormat(stock.askPrice, "0.00a").padStart(10) +
+          ns.nFormat(stock.forecast, ".000").padStart(10) +
           ns
             .nFormat(stock.position.long - stock.position.short, "0a")
             .padStart(10)
@@ -206,8 +216,8 @@ export async function main(ns) {
       }
 
       ns.print(
-        "-".padStart(12, "-"),
-        ("NET WORTH: " + ns.nFormat(net_worth, "$ 0.00a")).padStart(16),
+        "-".padStart(12, "-") +
+        ("NET WORTH: " + ns.nFormat(net_worth, "$ 0.00a")).padStart(16) +
         "-".padEnd(12, "-")
       );
     }
