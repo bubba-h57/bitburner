@@ -2,7 +2,7 @@ import type React_Type from "react";
 import { NS } from "Bitburner";
 
 /** Alias for document to prevent excessive RAM use */
-const doc = eval("document") as Document;
+export const doc = eval("document") as Document;
 var React: typeof React_Type;
 
 /**

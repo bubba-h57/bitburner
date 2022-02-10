@@ -2,24 +2,16 @@ import { NS, Server } from "Bitburner";
 
 /**
  * Get the list of servers connected to a server.
- * @remarks
  *
  * Returns an array containing the hostnames of all servers that are one
  * node way from the specified target server. The hostnames in the returned
  * array are strings.
  *
- * @param {NS} ns - Required, Netscript Interface. Collection
- *                               of all Netscript functions passed to scripts
- * @param rootHost - Optional, Hostname of the server to scan, default to current server.
- * @returns Returns an array of hostnames.
  */
 export function getAllServers(
-  ns: {
-    disableLog: (arg0: string) => void;
-    scan: (arg0: string | undefined) => any;
-  },
+  ns: NS,
   rootHost = "home"
-) {
+): string[] {
   ns.disableLog("scan");
   let pendingScan = [rootHost];
   const list = new Set(pendingScan);
@@ -37,19 +29,14 @@ export function getAllServers(
 /**
  * Returns an array of Server objects
  * from the array of hostnames passed in.
- *
- * @param {NS} ns
- * @param {string[]} servers
- * @returns Server[]
  */
-export function getServerInfo(ns: NS, servers?: any[] | undefined) {
+export function getServerInfo(ns: NS, servers?: string[]): Server[] {
   let serverData: Server[] = [];
 
   servers = servers ?? getAllServers(ns);
 
   servers.forEach(function (hostname: any) {
-    /** @param {import(".").Server } server */
-    let server = ns.getServer(hostname);
+    let server: Server = ns.getServer(hostname);
     serverData.push(server);
   });
   return serverData;
@@ -71,18 +58,12 @@ export function factionServers() {
   ];
 }
 
-/**
- *
- * @param {NS} ns
- * @param {string} destination
- * @returns
- */
 export async function findPath(
   ns: NS,
   destination: string = "",
-  current = "home"
+  current: string  = "home"
 ): Promise<string[]> {
-  let hostname: string | number | undefined;
+  let hostname: string | undefined;
   let pathToHostname: string[] = [];
   let links = {};
   links[current] = "";
@@ -115,8 +96,8 @@ export async function findPath(
  * @param {Server} server
  */
 export async function pushHackScripts(
-  ns: { scp: (arg0: string[], arg1: string, arg2: any) => any },
-  server: { hostname: string }
+  ns: NS,
+  server: Server
 ) {
   if (server.hostname === "home") {
     return;
@@ -129,32 +110,27 @@ export async function pushHackScripts(
 }
 
 export class ThreadInfo {
-  possible: number;
-  target: number;
-  total: number;
+  possibleThreadsToRun: number;
+  numberOfThreadsToRun: number;
+  totalThreadsUsed: number;
+
   constructor(possible: number, target: number, total: number) {
-    this.possible = possible;
-    this.target = target;
-    this.total = total;
+    this.possibleThreadsToRun = possible;
+    this.numberOfThreadsToRun = target;
+    this.totalThreadsUsed = total;
   }
+
   hasRoom(): boolean {
-    return this.total <= this.target;
+    return this.totalThreadsUsed <= this.possibleThreadsToRun;
   }
 
   incrementTotal() {
-    this.total += this.target;
+    this.totalThreadsUsed += this.numberOfThreadsToRun;
   }
 }
 
-/**
- *
- * @param {Server} server
- * @param {number} scriptCost
- * @param {number} mumberOfTargets
- * @returns {ThreadInfo}
- */
 export function getThreadInfo(
-  server: any,
+  server: Server,
   scriptCost: number,
   mumberOfTargets: number
 ): ThreadInfo {
@@ -163,16 +139,11 @@ export function getThreadInfo(
   return new ThreadInfo(possible, Math.ceil(possible / mumberOfTargets), 0);
 }
 
-/** @param {Server } server */
-export function getTargetRam(server: { hostname: string; maxRam: number }) {
+
+export function getTargetRam(server: Server) {
   return server.hostname === "home" ? server.maxRam * 0.8 : server.maxRam;
 }
 
-/**
- *
- * @param {NS} ns
- * @returns {Server[]}
- */
 export function getTargets(ns: NS): Server[] {
   let servers = getServerInfo(ns).filter(
     (server) =>
@@ -184,12 +155,7 @@ export function getTargets(ns: NS): Server[] {
   return servers;
 }
 
-/**
- *
- * @param {NS} ns
- * @returns {Server[]}
- */
-export function getHosts(ns: any): Server[] {
+export function getHosts(ns: NS): Server[] {
   let servers = getServerInfo(ns).filter(
     (server) =>
       server.purchasedByPlayer ||
