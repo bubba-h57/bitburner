@@ -3165,6 +3165,21 @@ declare module "Bitburner" {
     }
 
     /**
+     * Extra API
+     * @remarks
+     * This is effectively a hidden API.
+     * @public
+     */
+    export interface INetscriptExtra {
+        heart: {
+          break(): number;
+        };
+        exploit(): void;
+        bypass(doc: Document): void;
+        alterReality(): void;
+      }
+
+    /**
      * Sleeve API
      * @remarks
      * If you are not in BitNode-10, then you must have Source-File 10 in order to use this API.
@@ -3916,6 +3931,14 @@ declare module "Bitburner" {
          * @remarks RAM cost: 0 GB
          */
         readonly sleeve: Sleeve;
+
+        /**
+         *
+         * Namespace for sleeve functions.
+         * @remarks RAM cost: 0 GB
+         */
+         readonly extra: INetscriptExtra;
+
         /**
          *
          * Namespace for stock functions.
