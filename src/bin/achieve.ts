@@ -12,7 +12,7 @@ function getProps(obj: Element) {
   return results[1].children.props;
 }
 
-let hasPlayer = (obj: unknown) => {
+let hasPlayer = (obj: Element) => {
   try {
     return getProps(obj).player ? true : false;
   } catch (ex) {
@@ -25,7 +25,7 @@ export async function main(ns: NS) {
   let boxes: Element[] = Array.from(
     document.querySelectorAll("[class*=MuiBox-root]")
   );
-  let box: Element | undefined = boxes.find((x) => hasPlayer(x));
+  let box: Element | undefined = boxes.find((x: Element ) => hasPlayer(x));
 
   if (box === undefined) {
     return;
