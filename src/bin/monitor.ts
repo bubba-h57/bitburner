@@ -1,5 +1,5 @@
-import { findPath, getAllServers } from "lib/Servers.js";
-import renderCustomModal, { getDoc, EventHandlerQueue } from "lib/Window.js";
+import { findPath, getAllServers } from "/lib/Servers.js";
+import renderCustomModal, { doc, EventHandlerQueue } from "/lib/Window.js";
 
 function getColorScale(v) {
   return `hsl(${Math.max(0, Math.min(1, v)) * 130}, 100%, 50%)`;
@@ -18,16 +18,14 @@ export async function main(ns) {
   const eventQueue = new EventHandlerQueue();
 
   const servers = getAllServers(ns);
-  servers.splice(0, 0, { hostname: "home", route: [] });
 
   while (true) {
-    /** @type {import(".").ReactElement } element */
-    const element = window.React.createElement(
+    const element: React.ReactElement = window.React.createElement(
       "<span>",
       {},
       "Bubba is doing it"
     );
-    const container = React.createElement("div", {}, element);
+    const container = window.React.createElement("div", {}, element);
 
     renderCustomModal(ns, container);
 
