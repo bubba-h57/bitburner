@@ -5,7 +5,11 @@ export async function main(ns: NS) {
   const ONE_MINUTE = 60000;
 
   let jobs = [
-    { script: "/bin/sudo.js", delay: ONE_MINUTE * 20, lastrun: performance.now() },
+    {
+      script: "/bin/sudo.js",
+      delay: ONE_MINUTE * 20,
+      lastrun: performance.now()
+    },
     {
       script: "/bin/contractor.js",
       delay: ONE_MINUTE * 20,
