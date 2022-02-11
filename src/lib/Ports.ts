@@ -16,12 +16,7 @@ export function portsWeCanHack(ns: NS) {
   return count;
 }
 
-/**
- *
- * @param {NS} ns
- * @param {string} hostname
- */
-export async function openPorts(ns: NS, hostname: any) {
+export async function openPorts(ns: NS, hostname: string) {
   porthacks.forEach(async function (hack) {
     ns.disableLog(hack.apiCall);
     if (ns.fileExists(hack.filename)) {
