@@ -1,3 +1,5 @@
 code/
 tmp/
 index.d.ts
+build/
+node_modules/
