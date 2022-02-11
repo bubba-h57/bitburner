@@ -3979,6 +3979,11 @@ declare module "Bitburner" {
         readonly args: (string | number | boolean)[];
 
         /**
+         * Increases your rep gain of hacking contracts while share is called. Scales with thread count.
+         */
+        share(): Promise<void>;
+
+        /**
          * Steal a servers money.
          * @remarks
          * RAM cost: 0.1 GB
