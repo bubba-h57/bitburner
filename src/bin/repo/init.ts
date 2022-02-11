@@ -1,7 +1,7 @@
 import {NS} from "Bitburner";
 
 const params = {
-    baseUrl: "http://172.19.97.134:9182",
+    baseUrl: "http://localhost:9182",
     manifest: {
         sourceFile: "resources/manifest.json",
         destFile: "/resources/manifest.json.txt",

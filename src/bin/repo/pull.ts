@@ -12,7 +12,7 @@ interface RepoSettings {
   }
 
   const repoSettings: RepoSettings = {
-    baseUrl: "http://172.19.97.134:9182",
+    baseUrl: "http://localhost:9182",
     manifestPath: "/resources/manifest.json",
     manifestFile: "/resources/manifest.json.txt"
   };
