@@ -61,7 +61,7 @@ export function factionServers() {
 export async function findPath(
   ns: NS,
   destination: string = "",
-  current: string  = "home"
+  current: string = "home"
 ): Promise<string[]> {
   let hostname: string | undefined;
   let pathToHostname: string[] = [];
@@ -141,7 +141,7 @@ export function getThreadInfo(
 
 
 export function getTargetRam(server: Server) {
-  return server.hostname === "home" ? server.maxRam * 0.8 : server.maxRam;
+  return server.hostname === "home" ? server.maxRam - 500 : server.maxRam;
 }
 
 export function getTargets(ns: NS): Server[] {
