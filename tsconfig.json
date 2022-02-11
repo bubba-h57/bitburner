@@ -4,6 +4,7 @@
       "module": "ES2020",
       "rootDir": "src/",
       "baseUrl": "src/",
+      "jsx": "react",
       "paths": {
         "/lib/*": [
           "lib/*"
