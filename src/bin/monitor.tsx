@@ -1,5 +1,8 @@
+import type React_Type from 'react';
 import { findPath, getAllServers } from "/lib/Servers.js";
 import renderCustomModal, { doc, EventHandlerQueue } from "/lib/Window.js";
+
+declare var React: typeof React_Type;
 
 function getColorScale(v) {
   return `hsl(${Math.max(0, Math.min(1, v)) * 130}, 100%, 50%)`;
@@ -14,20 +17,17 @@ const toolbarStyles = {
 };
 
 export async function main(ns) {
+  ns.tail();
   console.log("Started monitor");
   const eventQueue = new EventHandlerQueue();
 
   const servers = getAllServers(ns);
 
   while (true) {
-    const element: React.ReactElement = window.React.createElement(
-      "<span>",
-      {},
-      "Bubba is doing it"
+    renderCustomModal(ns, <div>
+      Hello bitburner!
+    </div>
     );
-    const container = window.React.createElement("div", {}, element);
-
-    renderCustomModal(ns, container);
 
     await eventQueue.executeEvents();
     await ns.sleep(1_000);
