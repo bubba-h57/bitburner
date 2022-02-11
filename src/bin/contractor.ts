@@ -3,7 +3,6 @@ import { codingContractTypes } from "lib/Contracts.js";
 import { Logger } from "lib/Logger.js";
 import { NS } from "Bitburner";
 
-/** @param {NS } ns */
 export async function main(ns: NS) {
   const servers = getAllServers(ns, "home");
   let hostnameLength = 20;
