@@ -1,3 +1,26 @@
+import { NS } from "Bitburner";
+const symbols = ["", "k", "m", "b", "t", "q", "Q", "s", "S", "o", "n", "e33", "e36", "e39"];
+
+/**
+ * Return a formatted representation of the monetary amount using scale symbols (e.g. $6.50M)
+**/
+export function formatMoney(num: number, maxSignificantFigures: number = 6, maxDecimalPlaces: number = 3): string {
+  let numberShort = formatNumberShort(num, maxSignificantFigures, maxDecimalPlaces);
+  return num >= 0 ? "$" + numberShort : numberShort.replace("-", "-$");
+}
+
+/**
+* Return a formatted representation of the monetary amount using scale sympols (e.g. 6.50M)
+**/
+export function formatNumberShort(num: number, maxSignificantFigures: number = 6, maxDecimalPlaces: number = 3): string {
+  for (var i = 0, sign = Math.sign(num), num = Math.abs(num); num >= 1000 && i < symbols.length; i++) num /= 1000;
+  return ((sign < 0) ? "-" : "") + num.toFixed(Math.max(0, Math.min(maxDecimalPlaces, maxSignificantFigures - Math.floor(1 + Math.log10(num))))) + symbols[i];
+}
+
+export function disableLogs(ns: NS, listOfLogs: string[]): void {
+  ['disableLog'].concat(...listOfLogs).forEach(log => ns.disableLog(log));
+}
+
 /**
  * Formats a number.
  * @remarks
