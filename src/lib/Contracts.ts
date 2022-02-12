@@ -168,14 +168,13 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   {
     difficulty: 2.5,
     name: "Array Jumping Game",
-    answer: (data: number[]): boolean => {
+    answer: (data: number[]): number => {
       const n: number = data.length;
       let i = 0;
       for (let reach = 0; i < n && i <= reach; ++i) {
         reach = Math.max(i + data[i], reach);
       }
-      const solution: boolean = i === n;
-      return solution;
+      return i === n ? 1 : 0;
     },
   },
   {
