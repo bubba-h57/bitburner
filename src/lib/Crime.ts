@@ -1,5 +1,5 @@
 import { CrimeStats, NS } from "Bitburner";
-import { humanReadableNumbers } from "/lib/Helpers.js"
+import { humanReadableNumbers, formatMoney } from "/lib/Helpers.js"
 
 export interface ICrimeRisk {
     name: string;
@@ -16,15 +16,18 @@ export class CrimeRisk implements ICrimeRisk {
 }
 export class Crimes {
     crimes: string[] = [
-        "heist",
-        "assassination",
-        "kidnap",
-        "grand theft auto",
-        "homicide",
-        "larceny",
-        "mug someone",
-        "rob store",
-        "shoplift",
+        "Heist",
+        "Assassination",
+        "Kidnap",
+        "Grand Theft Auto",
+        "Homicide",
+        "Traffick Arms",
+        "Bond Forgery",
+        "Deal Drugs",
+        "Larceny",
+        "Mug",
+        "Rob Store",
+        "Shoplift",
     ];
     ns: NS;
 
@@ -54,12 +57,9 @@ export class Crimes {
     commitBestCrime(): void {
         let bestCrime = this.chooseBestCrime();
         this.ns.commitCrime(bestCrime.name);
-        let cash = humanReadableNumbers(this.ns.getCrimeStats(bestCrime.name).money);
-        this.ns.tprint(
-            `Crime: ${bestCrime.name} Risk Value: ${bestCrime.risk.toPrecision(3)} Cash to Earn: \$${cash}`
-        );
+        let cash = formatMoney(this.ns.getCrimeStats(bestCrime.name).money);
         this.ns.print(
-            `Crime: ${bestCrime.name} Risk Value: ${bestCrime.risk.toPrecision(3)} Cash to Earn: \$${cash}`
+            `${bestCrime.name} to Earn: ${cash}`
         );
     }
 }

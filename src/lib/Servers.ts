@@ -141,7 +141,7 @@ export function getThreadInfo(
 
 
 export function getTargetRam(server: Server) {
-  return server.hostname === "home" ? server.maxRam - 500 : server.maxRam;
+  return server.hostname === "home" ? server.maxRam - server.ramUsed - 100 : server.maxRam;
 }
 
 export function getTargets(ns: NS): Server[] {

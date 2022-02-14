@@ -71,35 +71,38 @@ export class Territory {
     }
 
     public warfare(): boolean {
-        /** Short circuit if we own everything. */
-        if (this.allYourBasesAreBelongToUs) {
+        this.mafia.warfare();
+        if (this.mafia.makingWar()) {
+            /** Short circuit if we own everything. */
+            if (this.allYourBasesAreBelongToUs) {
+                this.preparedForNextWarTick = false;
+                return false;
+            }
+            /** Detect initial war tick if we haven't yet. */
+            if (this.warTickHasNotBeenDetected()) {
+                this.detectWarTick();
+                this.preparedForNextWarTick = false;
+            }
+
+            /** If the next tick is a war tick, prepare for war **/
+            if (this.nextTickMeansWar()) {
+                this.ns.print(`${new Date().toISOString()} WARN Next Tick means war.`);
+                this.prepareForWar();
+                this.preparedForNextWarTick = true;
+                this.setNextWarTick();
+                return true;
+            }
+
+            if (this.preparedForNextWarTick && this.meansWar()) {
+                this.ns.print(`${new Date().toISOString()} WARN We did a war.`);
+                this.didAWar();
+                this.preparedForNextWarTick = false;
+                return false;
+            }
             this.preparedForNextWarTick = false;
             return false;
         }
-        /** Detect initial war tick if we haven't yet. */
-        if (this.warTickHasNotBeenDetected()) {
-            this.detectWarTick();
-            this.preparedForNextWarTick = false;
-        }
-
-        /** If the next tick is a war tick, prepare for war **/
-        if (this.nextTickMeansWar()) {
-            this.ns.print(`${new Date().toISOString()} WARN Next Tick means war.`);
-            this.prepareForWar();
-            this.preparedForNextWarTick = true;
-            this.setNextWarTick();
-            return true;
-        }
-
-        if (this.preparedForNextWarTick && this.meansWar()) {
-            this.ns.print(`${new Date().toISOString()} WARN We did a war.`);
-            this.didAWar();
-            this.preparedForNextWarTick = false;
-            return false;
-        }
-        this.preparedForNextWarTick = false;
         return false;
-
     }
 
     protected myPowerChanged(): boolean {
