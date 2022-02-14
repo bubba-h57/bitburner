@@ -4,7 +4,7 @@ import { getTargets, getThreadInfo, pushHackScripts } from "/lib/Servers.js";
 
 
 /** @param {NS } ns */
-export async function main(ns:NS) {
+export async function main(ns: NS) {
   let memMap = [
     { ram: 2, cost: "110.000 K" },
     { ram: 4, cost: "220.000 K" },
@@ -72,7 +72,7 @@ export async function main(ns:NS) {
       while (threads.hasRoom()) {
         if (ns.isRunning(hackScript, server.hostname, targets[i].hostname)) {
           ns.print(
-            "WARN " + server.hostname + " looped around to repeate targets."
+            "WARN " + server.hostname + " looped around to repeat targets."
           );
           break;
         }
