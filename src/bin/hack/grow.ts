@@ -1,4 +1,5 @@
 import { NS } from "Bitburner";
+
 /** @param {NS } ns */
 export async function main(ns: NS) {
     if (ns.args[0] === undefined || ns.args[0] === '') {
@@ -9,7 +10,7 @@ export async function main(ns: NS) {
     ns.tprint(`INFO Targeting ${target}`);
     let maxMoney: number = ns.getServerMaxMoney(target);
     let currMoney: number = ns.getServerMoneyAvailable(target);
-    while( currMoney < maxMoney){
+    while (currMoney < maxMoney) {
         ns.tprint(`WARN Current Money: ${currMoney} / ${maxMoney}`);
         await ns.grow(target);
         currMoney = ns.getServerMoneyAvailable(target);
