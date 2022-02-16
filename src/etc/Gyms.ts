@@ -12,7 +12,7 @@ export const config = {
       defense: 100,
       agility: 100,
     },
-    advance: {
+    advanced: {
       strength: 400,
       dexterity: 400,
       defense: 400,

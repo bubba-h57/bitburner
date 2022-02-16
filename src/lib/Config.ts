@@ -1,4 +1,5 @@
 import { config as gyms } from '/etc/Gyms.js';
+import { config as factions } from '/etc/Factions';
 
 export function config(key: string, alternative: any = null): any | null {
   return Config.get(key, alternative);
@@ -7,6 +8,7 @@ export function config(key: string, alternative: any = null): any | null {
 class Config {
   static configs = {
     gyms: gyms,
+    factions: factions,
   };
 
   public static get(key: string, alternative: any = null): any | null {
