@@ -10,19 +10,22 @@ export async function main(ns: NS) {
   let programNames = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe'];
   let needPorthack = true;
   const hackScript = '/bin/hack.js';
+  let scriptRamCost = ns.getScriptRam(hackScript);
 
   ns.disableLog('ALL');
   ns.tail();
   ns.print(`${new Date().toISOString()} Start the loop.`);
   while (ns.getServerMaxRam('home') < 2 ** 20 || ns.getServer('home').cpuCores < 8) {
-    // ns.print(`${new Date().toISOString()} Cores.`);
+    let home = ns.getServer('home');
     if (ns.upgradeHomeCores()) {
-      ns.print(`${new Date().toISOString()} Upgraded Home CPU Cores to ${ns.getServer('home').cpuCores}`);
+      ns.print(`${new Date().toISOString()} Upgraded Home CPU Cores to ${home.cpuCores}`);
+      hackHome(ns, home, hackScript, scriptRamCost);
     }
 
     // ns.print(`${new Date().toISOString()} RAM.`);
     if (ns.upgradeHomeRam()) {
       ns.print(`${new Date().toISOString()} Upgraded Home RAM to ${formatNumberShort(ns.getServerMaxRam('home'))}`);
+      hackHome(ns, home, hackScript, scriptRamCost);
     }
 
     // ns.print(`${new Date().toISOString()} Server.`);
@@ -31,7 +34,7 @@ export async function main(ns: NS) {
     if (newHost !== '') {
       ns.print(`${new Date().toISOString()} Purchased Host: ${newHost}`);
       let targets: Server[] = getTargets(ns);
-      let scriptRamCost = ns.getScriptRam(hackScript);
+
       let server = ns.getServer(newHost);
       let threads = getThreadInfo(server, scriptRamCost, targets.length);
       await pushHackScripts(ns, server);
@@ -79,4 +82,24 @@ export async function main(ns: NS) {
 
 function canShop(ns: NS): boolean {
   return ns.scan('home').includes('darkweb');
+}
+
+async function hackHome(ns: NS, home: Server, hackScript: string, scriptRamCost: number) {
+  ns.scriptKill(hackScript, 'home');
+  let targets: Server[] = getTargets(ns);
+  let threads = getThreadInfo(home, scriptRamCost, targets.length);
+  let i = 0;
+  while (threads.hasRoom()) {
+    if (ns.isRunning(hackScript, home.hostname, targets[i].hostname)) {
+      ns.print(`${new Date().toISOString()} WARN ${home.hostname} looped around to repeat targets.`);
+      break;
+    }
+
+    ns.exec(hackScript, home.hostname, threads.numberOfThreadsToRun, targets[i].hostname);
+
+    threads.incrementTotal();
+    i++;
+    if (i === targets.length) i = 0;
+    await ns.sleep(200);
+  }
 }
