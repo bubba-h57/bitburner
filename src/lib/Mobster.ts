@@ -36,7 +36,7 @@ export class Mobster {
   }
 
   public work(): void {
-    this.equip();
+    // this.equip();
     if (!this.train()) {
       if (!this.layLow()) {
         let optStat = this.mafia.optimalStat();

@@ -1,4 +1,4 @@
-export const config = {
+export const factions = {
   servers: [
     'CSEC',
     'I.I.I.I',

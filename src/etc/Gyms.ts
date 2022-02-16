@@ -1,4 +1,4 @@
-export const config = {
+export const gyms = {
   locations: [
     { city: 'Aevum', gym: 'Snap Fitness Gym' },
     { city: 'Sector-12', gym: 'Powerhouse Gym' },
