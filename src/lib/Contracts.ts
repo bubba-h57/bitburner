@@ -34,10 +34,10 @@ export class CodingContractType {
 /* Helper functions for Coding Contracts */
 function removeBracketsFromArrayString(str: string): string {
   let strCpy: string = str;
-  if (strCpy.startsWith("[")) {
+  if (strCpy.startsWith('[')) {
     strCpy = strCpy.slice(1);
   }
-  if (strCpy.endsWith("]")) {
+  if (strCpy.endsWith(']')) {
     strCpy = strCpy.slice(0, -1);
   }
 
@@ -48,11 +48,11 @@ function convert2DArrayToString(arr: any[][]): string {
   const components: string[] = [];
   arr.forEach((e: any) => {
     let s: string = e.toString();
-    s = ["[", s, "]"].join("");
+    s = ['[', s, ']'].join('');
     components.push(s);
   });
 
-  return components.join(",").replace(/\s/g, "");
+  return components.join(',').replace(/\s/g, '');
 }
 
 function removeQuotesFromString(str: string): string {
@@ -70,7 +70,7 @@ function removeQuotesFromString(str: string): string {
 export const codingContractTypes: ICodingContractTypeMetadata[] = [
   {
     difficulty: 1,
-    name: "Find Largest Prime Factor",
+    name: 'Find Largest Prime Factor',
     answer: (data: number): number => {
       let fac = 2;
       let n: number = data;
@@ -86,7 +86,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 1,
-    name: "Subarray with Maximum Sum",
+    name: 'Subarray with Maximum Sum',
     answer: (data: number[]): number => {
       const nums: number[] = data.slice();
       for (let i = 1; i < nums.length; i++) {
@@ -98,7 +98,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 1.5,
-    name: "Total Ways to Sum",
+    name: 'Total Ways to Sum',
     answer: (data: number): number => {
       const ways: number[] = [1];
       ways.length = data + 1;
@@ -114,7 +114,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 2,
-    name: "Spiralize Matrix",
+    name: 'Spiralize Matrix',
     answer: (data: number[][]): number[] => {
       const spiral: number[] = [];
       const m: number = data.length;
@@ -167,7 +167,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 2.5,
-    name: "Array Jumping Game",
+    name: 'Array Jumping Game',
     answer: (data: number[]): number => {
       const n: number = data.length;
       let i = 0;
@@ -179,7 +179,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 3,
-    name: "Merge Overlapping Intervals",
+    name: 'Merge Overlapping Intervals',
     answer: (data: number[][]): string => {
       const intervals: number[][] = data.slice();
       intervals.sort((a: number[], b: number[]) => {
@@ -207,7 +207,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 3,
-    name: "Generate IP Addresses",
+    name: 'Generate IP Addresses',
     answer: (data: string): string[] => {
       const ret: string[] = [];
       for (let a = 1; a <= 3; ++a) {
@@ -217,24 +217,10 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
               if (a + b + c + d === data.length) {
                 const A: number = parseInt(data.substring(0, a), 10);
                 const B: number = parseInt(data.substring(a, a + b), 10);
-                const C: number = parseInt(
-                  data.substring(a + b, a + b + c),
-                  10
-                );
-                const D: number = parseInt(
-                  data.substring(a + b + c, a + b + c + d),
-                  10
-                );
+                const C: number = parseInt(data.substring(a + b, a + b + c), 10);
+                const D: number = parseInt(data.substring(a + b + c, a + b + c + d), 10);
                 if (A <= 255 && B <= 255 && C <= 255 && D <= 255) {
-                  const ip: string = [
-                    A.toString(),
-                    ".",
-                    B.toString(),
-                    ".",
-                    C.toString(),
-                    ".",
-                    D.toString(),
-                  ].join("");
+                  const ip: string = [A.toString(), '.', B.toString(), '.', C.toString(), '.', D.toString()].join('');
                   if (ip.length === data.length + 3) {
                     ret.push(ip);
                   }
@@ -249,7 +235,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 1,
-    name: "Algorithmic Stock Trader I",
+    name: 'Algorithmic Stock Trader I',
     answer: (data: number[]): string => {
       let maxCur = 0;
       let maxSoFar = 0;
@@ -263,7 +249,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 2,
-    name: "Algorithmic Stock Trader II",
+    name: 'Algorithmic Stock Trader II',
     answer: (data: number[]): string => {
       let profit = 0;
       for (let p = 1; p < data.length; ++p) {
@@ -275,7 +261,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 5,
-    name: "Algorithmic Stock Trader III",
+    name: 'Algorithmic Stock Trader III',
     answer: (data: number[]): string => {
       let hold1: number = Number.MIN_SAFE_INTEGER;
       let hold2: number = Number.MIN_SAFE_INTEGER;
@@ -293,7 +279,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 8,
-    name: "Algorithmic Stock Trader IV",
+    name: 'Algorithmic Stock Trader IV',
     answer: (data: any[]): number => {
       const k: number = data[0];
       const prices: number[] = data[1];
@@ -331,7 +317,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 5,
-    name: "Minimum Path Sum in a Triangle",
+    name: 'Minimum Path Sum in a Triangle',
     answer: (data: number[][]): number => {
       const n: number = data.length;
       const dp: number[] = data[n - 1].slice();
@@ -346,7 +332,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 3,
-    name: "Unique Paths in a Grid I",
+    name: 'Unique Paths in a Grid I',
     answer: (data: number[]): number => {
       const n: number = data[0]; // Number of rows
       const m: number = data[1]; // Number of columns
@@ -367,7 +353,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 5,
-    name: "Unique Paths in a Grid II",
+    name: 'Unique Paths in a Grid II',
     answer: (data: number[][]): number => {
       const obstacleGrid: number[][] = [];
       obstacleGrid.length = data.length;
@@ -382,9 +368,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
           } else if (i == 0 && j == 0) {
             obstacleGrid[0][0] = 1;
           } else {
-            obstacleGrid[i][j] =
-              (i > 0 ? obstacleGrid[i - 1][j] : 0) +
-              (j > 0 ? obstacleGrid[i][j - 1] : 0);
+            obstacleGrid[i][j] = (i > 0 ? obstacleGrid[i - 1][j] : 0) + (j > 0 ? obstacleGrid[i][j - 1] : 0);
           }
         }
       }
@@ -394,16 +378,16 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
   },
   {
     difficulty: 10,
-    name: "Sanitize Parentheses in Expression",
+    name: 'Sanitize Parentheses in Expression',
     answer: (data: string): string[] => {
       let left = 0;
       let right = 0;
       const res: string[] = [];
 
       for (let i = 0; i < data.length; ++i) {
-        if (data[i] === "(") {
+        if (data[i] === '(') {
           ++left;
-        } else if (data[i] === ")") {
+        } else if (data[i] === ')') {
           left > 0 ? --left : ++right;
         }
       }
@@ -429,29 +413,27 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
           return;
         }
 
-        if (s[index] === "(") {
+        if (s[index] === '(') {
           if (left > 0) {
             dfs(pair, index + 1, left - 1, right, s, solution, res);
           }
           dfs(pair + 1, index + 1, left, right, s, solution + s[index], res);
-        } else if (s[index] === ")") {
-          if (right > 0)
-            dfs(pair, index + 1, left, right - 1, s, solution, res);
-          if (pair > 0)
-            dfs(pair - 1, index + 1, left, right, s, solution + s[index], res);
+        } else if (s[index] === ')') {
+          if (right > 0) dfs(pair, index + 1, left, right - 1, s, solution, res);
+          if (pair > 0) dfs(pair - 1, index + 1, left, right, s, solution + s[index], res);
         } else {
           dfs(pair, index + 1, left, right, s, solution + s[index], res);
         }
       }
 
-      dfs(0, 0, left, right, data, "", res);
+      dfs(0, 0, left, right, data, '', res);
 
       return res;
     },
   },
   {
     difficulty: 10,
-    name: "Find All Valid Math Expressions",
+    name: 'Find All Valid Math Expressions',
     answer: (data: any[]): string[] => {
       const num: string = data[0];
       const target: number = data[1];
@@ -473,7 +455,7 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
         }
 
         for (let i = pos; i < num.length; ++i) {
-          if (i != pos && num[pos] == "0") {
+          if (i != pos && num[pos] == '0') {
             break;
           }
           const cur = parseInt(num.substring(pos, i + 1));
@@ -481,39 +463,15 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
           if (pos === 0) {
             helper(res, path + cur, num, target, i + 1, cur, cur);
           } else {
-            helper(
-              res,
-              path + "+" + cur,
-              num,
-              target,
-              i + 1,
-              evaluated + cur,
-              cur
-            );
-            helper(
-              res,
-              path + "-" + cur,
-              num,
-              target,
-              i + 1,
-              evaluated - cur,
-              -cur
-            );
-            helper(
-              res,
-              path + "*" + cur,
-              num,
-              target,
-              i + 1,
-              evaluated - multed + multed * cur,
-              multed * cur
-            );
+            helper(res, path + '+' + cur, num, target, i + 1, evaluated + cur, cur);
+            helper(res, path + '-' + cur, num, target, i + 1, evaluated - cur, -cur);
+            helper(res, path + '*' + cur, num, target, i + 1, evaluated - multed + multed * cur, multed * cur);
           }
         }
       }
 
       const result: string[] = [];
-      helper(result, "", num, target, 0, 0, 0);
+      helper(result, '', num, target, 0, 0, 0);
 
       return result;
     },

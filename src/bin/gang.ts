@@ -233,8 +233,6 @@ async function initialize(ns: NS) {
   await optimizeGangCrime(ns, myGangInfo);
 }
 
-/** @param {NS} ns
- * Executed every `interval` **/
 async function mainLoop(ns) {
   // Update gang information (specifically monitoring gang power to see when territory ticks)
   const myGangInfo = ns.gang.getGangInformation(); //await getNsDataThroughFile(ns: NS, 'ns.gang.getGangInformation()', '/Temp/gang-info.txt');

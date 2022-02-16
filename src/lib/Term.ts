@@ -1,4 +1,4 @@
-import { NS } from "Bitburner";
+import { NS } from 'Bitburner';
 
 /**
  * Writes an ephemeral message to the terminal.
@@ -7,7 +7,7 @@ import { NS } from "Bitburner";
  */
 export function writeOutFixedLength(message: string) {
   message.replace(/ /g, function (i: any) {
-    return "&nbsp;";
+    return '&nbsp;';
   });
   out(message);
 }
@@ -17,12 +17,12 @@ export function out(message: string) {
     '<li class="jss663 MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1rxnx5a" style="padding: 0px">',
     '<p class="jss668 MuiTypography-root MuiTypography-body1 css-eezd29">',
     message,
-    "</p>",
-    "</li>",
-  ].join("");
+    '</p>',
+    '</li>',
+  ].join('');
 
-  const list = document.getElementById("terminal");
-  list?.insertAdjacentHTML("beforeend", output);
+  const list = document.getElementById('terminal');
+  list?.insertAdjacentHTML('beforeend', output);
 }
 
 /**

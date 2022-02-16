@@ -1,14 +1,13 @@
-import { NS } from "Bitburner";
-import { findPath } from "/lib/Servers.js";
-
+import { NS } from 'Bitburner';
+import { findPath } from '/lib/Servers.js';
 
 export async function main(ns: NS) {
   let path = await findPath(ns, ns.args[0].toString());
-  let output = "home;";
+  let output = 'home;';
 
-  path.forEach((hostname) => (output += " connect " + hostname + ";"));
+  path.forEach((hostname) => (output += ' connect ' + hostname + ';'));
 
-  const terminalInput = (<HTMLInputElement>document.getElementById("terminal-input"));
+  const terminalInput = <HTMLInputElement>document.getElementById('terminal-input');
   if (terminalInput === null) {
     return;
   }

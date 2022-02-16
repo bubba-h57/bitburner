@@ -1,3 +1,3 @@
 export function getDocument() {
-  return eval("document");
+  return eval('document');
 }

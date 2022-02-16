@@ -1,15 +1,15 @@
-import type React_Type from "react";
-import { NS } from "Bitburner";
+import type React_Type from 'react';
+import { NS } from 'Bitburner';
 
 /** Alias for document to prevent excessive RAM use */
-export const doc = eval("document") as Document;
+export const doc = eval('document') as Document;
 var React: typeof React_Type;
 
 /**
  * Returns the full command line for the current process, which is also the title of the tail modal
  */
 export function getCommandLine(ns: NS) {
-  return ns.getScriptName() + " " + ns.args.join(" ");
+  return ns.getScriptName() + ' ' + ns.args.join(' ');
 }
 
 /**
@@ -18,9 +18,7 @@ export function getCommandLine(ns: NS) {
 export function getTailModal(ns: NS) {
   const commandLine = getCommandLine(ns);
   const modals = doc.querySelectorAll(`.drag > h6`);
-  const tailTitleEl = Array.from(modals).find((x) =>
-    x.textContent!.includes(commandLine)
-  );
+  const tailTitleEl = Array.from(modals).find((x) => x.textContent!.includes(commandLine));
   return tailTitleEl?.parentElement!.parentElement!.nextSibling;
 }
 
@@ -29,26 +27,26 @@ export function getTailModal(ns: NS) {
  * If the container has already been created, the existing container will be returned.
  */
 export function getCustomModalContainer(ns: NS): HTMLDivElement | undefined {
-  const id = getCommandLine(ns).replace(/[^\w\.]/g, "_");
+  const id = getCommandLine(ns).replace(/[^\w\.]/g, '_');
   let containerEl = doc.getElementById(id) as HTMLDivElement | null;
   if (!containerEl) {
     const modalEl = getTailModal(ns);
     if (!modalEl) {
       return undefined;
     }
-    containerEl = doc.createElement("div");
+    containerEl = doc.createElement('div');
     containerEl.id = id;
     containerEl.style.fontFamily =
       '"Lucida Console", "Lucida Sans Unicode", "Fira Mono", Consolas, "Courier New", Courier, monospace, "Times New Roman"';
-    containerEl.style.fontWeight = "400";
-    containerEl.style.position = "absolute";
-    containerEl.style.overflow = "auto";
-    containerEl.style.left = "0";
-    containerEl.style.right = "0";
-    containerEl.style.top = "34px";
-    containerEl.style.bottom = "0";
-    containerEl.style.background = "black";
-    containerEl.style.color = "rgb(0, 204, 0)";
+    containerEl.style.fontWeight = '400';
+    containerEl.style.position = 'absolute';
+    containerEl.style.overflow = 'auto';
+    containerEl.style.left = '0';
+    containerEl.style.right = '0';
+    containerEl.style.top = '34px';
+    containerEl.style.bottom = '0';
+    containerEl.style.background = 'black';
+    containerEl.style.color = 'rgb(0, 204, 0)';
     modalEl.insertBefore(containerEl, modalEl.firstChild);
   }
   return containerEl;
@@ -90,11 +88,7 @@ export class EventHandlerQueue {
 
   public wrap<T extends (...args: any[]) => any>(fn: T) {
     return (...args: Parameters<T>) => {
-      if (
-        args[0] &&
-        typeof args[0] === "object" &&
-        typeof args[0].persist === "function"
-      ) {
+      if (args[0] && typeof args[0] === 'object' && typeof args[0].persist === 'function') {
         args[0].persist();
       }
       this.queue.push(() => fn(...args));

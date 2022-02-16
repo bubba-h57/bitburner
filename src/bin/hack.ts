@@ -1,7 +1,6 @@
-import { NS } from "Bitburner";
-import { humanReadableNumbers } from "/lib/Helpers.js";
+import { NS } from 'Bitburner';
+import { humanReadable } from '/lib/Helpers.js';
 
-/** @param {NS } ns */
 export async function main(ns: NS) {
   await configLogs(ns);
 
@@ -21,7 +20,7 @@ export async function main(ns: NS) {
     if (ns.getServerSecurityLevel(target) > securityThresh) {
       // If the server's security level is above our threshold, weaken it
       let securityDecrease = await ns.weaken(target);
-      log(ns, `Decreased ${target} security by ${securityDecrease}.`, "ALERT");
+      log(ns, `Decreased ${target} security by ${securityDecrease}.`, 'ALERT');
       continue;
     }
     if (ns.getServerMoneyAvailable(target) < moneyThresh) {
@@ -32,11 +31,7 @@ export async function main(ns: NS) {
     }
     // Otherwise, hack it
     let stolen = await ns.hack(target);
-    log(
-      ns,
-      `Stole ${humanReadableNumbers(stolen)} from ${target}'s bank account.`,
-      "WARNING"
-    );
+    log(ns, `Stole ${humanReadable(stolen)} from ${target}'s bank account.`, 'WARNING');
   }
 }
 /**
@@ -44,33 +39,24 @@ export async function main(ns: NS) {
  * @param {import(".").NS } ns
  * @param {*} message
  */
-function log(ns, message, loglevel = "INFO") {
-  let logLevels = [
-    "EMERGENCY",
-    "ALERT",
-    "CRITICAL",
-    "ERROR",
-    "WARNING",
-    "NOTICE",
-    "INFO",
-    "DEBUG",
-  ];
+function log(ns, message, loglevel = 'INFO') {
+  let logLevels = ['EMERGENCY', 'ALERT', 'CRITICAL', 'ERROR', 'WARNING', 'NOTICE', 'INFO', 'DEBUG'];
 
   const timestamp = new Date().toISOString();
-  ns.print(timestamp + " ".repeat(3) + loglevel.padEnd(12, " ") + message);
+  ns.print(timestamp + ' '.repeat(3) + loglevel.padEnd(12, ' ') + message);
 }
 
 /** @param {import(".").NS } ns */
 async function configLogs(ns) {
   let logs = [
-    "disableLog",
-    "getServerMaxMoney",
-    "getServerMinSecurityLevel",
-    "getServerSecurityLevel",
-    "getServerMoneyAvailable",
-    "weaken",
-    "grow",
-    "hack",
+    'disableLog',
+    'getServerMaxMoney',
+    'getServerMinSecurityLevel',
+    'getServerSecurityLevel',
+    'getServerMoneyAvailable',
+    'weaken',
+    'grow',
+    'hack',
   ];
 
   logs.forEach(async (command) => await ns.disableLog(command));
@@ -81,11 +67,11 @@ async function getTarget(ns) {
     return ns.args[0];
   }
 
-  if (ns.getHostname() != "home") {
-    await ns.scp("target.txt", "home", ns.getHostname());
+  if (ns.getHostname() != 'home') {
+    await ns.scp('target.txt', 'home', ns.getHostname());
   }
 
-  return await ns.read("target.txt");
+  return await ns.read('target.txt');
 }
 
 export function autocomplete(data, args) {

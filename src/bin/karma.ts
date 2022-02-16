@@ -1,8 +1,7 @@
-import { NS} from "Bitburner";
+import { NS } from 'Bitburner';
 
-/** @param {NS} ns **/
 export async function main(ns: NS) {
-  ns.disableLog("ALL");
+  ns.disableLog('ALL');
   ns.tail();
 
   while (true) {

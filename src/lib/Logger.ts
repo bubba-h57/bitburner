@@ -1,4 +1,4 @@
-import { NS } from "Bitburner";
+import { NS } from 'Bitburner';
 
 export class Logger {
   /** @type {CallableFunction[]} */
@@ -8,7 +8,7 @@ export class Logger {
   ns: NS;
 
   /** @param {string} name */
-  name = "/log/logger.txt";
+  name = '/log/logger.txt';
 
   /**
    * @param {NS } ns
@@ -42,11 +42,7 @@ export class Logger {
      * @param {string} message
      */
     this.writers.push(async function (ns: NS, message: string, name: any) {
-      await ns.write(
-        name,
-        [new Date().toISOString() + "   " + message + "\n"],
-        "a"
-      );
+      await ns.write(name, [new Date().toISOString() + '   ' + message + '\n'], 'a');
     });
   }
 

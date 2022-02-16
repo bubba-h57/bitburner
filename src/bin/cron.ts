@@ -1,22 +1,21 @@
-import { NS } from "Bitburner";
+import { NS } from 'Bitburner';
 
-/** @type NS */
 export async function main(ns: NS) {
   const ONE_MINUTE = 60000;
 
   let jobs = [
     {
-      script: "/bin/sudo.js",
-      delay: ONE_MINUTE * 20,
-      lastrun: performance.now()
-    },
-    {
-      script: "/bin/contractor.js",
+      script: '/bin/sudo.js',
       delay: ONE_MINUTE * 20,
       lastrun: performance.now(),
     },
     {
-      script: "/bin/hacker.js",
+      script: '/bin/contractor.js',
+      delay: ONE_MINUTE * 20,
+      lastrun: performance.now(),
+    },
+    {
+      script: '/bin/hacker.js',
       delay: ONE_MINUTE * 90,
       lastrun: performance.now(),
     },
@@ -29,7 +28,7 @@ export async function main(ns: NS) {
       elapsedTime = performance.now() - jobs[index].lastrun;
 
       if (elapsedTime > jobs[index].delay) {
-        await ns.exec(jobs[index].script, "home");
+        await ns.exec(jobs[index].script, 'home');
         jobs[index].lastrun = performance.now();
       }
     }

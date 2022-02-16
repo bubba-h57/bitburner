@@ -1,5 +1,5 @@
 import { NS, Server} from "Bitburner";
-import { humanReadableNumbers } from "lib/Helpers.js";
+import { humanReadable  } from "lib/Helpers.js";
 import { writeOutFixedLength, hasFlag } from "lib/Term.js";
 import { getServerInfo } from "lib/Servers.js";
 

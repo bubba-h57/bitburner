@@ -1,6 +1,5 @@
-import { NS} from "Bitburner";
+import { NS } from 'Bitburner';
 
-/** @param {NS} ns **/
 export async function main(ns: NS) {
   var maxSharePer = 1.0;
   var stockBuyPer = 0.6;
@@ -9,9 +8,9 @@ export async function main(ns: NS) {
   var minSharePer = 5;
 
   while (true) {
-    ns.disableLog("disableLog");
-    ns.disableLog("sleep");
-    ns.disableLog("getServerMoneyAvailable");
+    ns.disableLog('disableLog');
+    ns.disableLog('sleep');
+    ns.disableLog('getServerMoneyAvailable');
     var stocks = ns.stock.getSymbols();
     for (const stock of stocks) {
       var position = ns.stock.getPosition(stock);
@@ -20,7 +19,7 @@ export async function main(ns: NS) {
       }
       buyPositions(stock);
     }
-    ns.print("Cycle Complete");
+    ns.print('Cycle Complete');
     await ns.sleep(6000);
   }
   function buyPositions(stock: string) {
@@ -28,17 +27,11 @@ export async function main(ns: NS) {
     var askPrice = ns.stock.getAskPrice(stock);
     var forecast = ns.stock.getForecast(stock);
     var volPer = ns.stock.getVolatility(stock);
-    var playerMoney = ns.getServerMoneyAvailable("home");
+    var playerMoney = ns.getServerMoneyAvailable('home');
 
     if (forecast >= stockBuyPer && volPer <= stockVolPer) {
-      if (
-        playerMoney - moneyKeep >
-        ns.stock.getPurchaseCost(stock, minSharePer, "Long")
-      ) {
-        var shares = Math.min(
-          (playerMoney - moneyKeep - 100000) / askPrice,
-          maxShares
-        );
+      if (playerMoney - moneyKeep > ns.stock.getPurchaseCost(stock, minSharePer, 'Long')) {
+        var shares = Math.min((playerMoney - moneyKeep - 100000) / askPrice, maxShares);
         ns.stock.buy(stock, shares);
       }
     }

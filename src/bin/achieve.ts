@@ -1,11 +1,11 @@
-import { NS } from "Bitburner";
+import { NS } from 'Bitburner';
 
 function getProps(obj: Element) {
   let entries: [string, any][] = Object.entries(obj);
   if (entries == undefined) {
     return;
   }
-  let results = entries.find((entry) => entry[0].startsWith("__reactProps"));
+  let results = entries.find((entry) => entry[0].startsWith('__reactProps'));
   if (results == undefined) {
     return;
   }
@@ -22,10 +22,8 @@ let hasPlayer = (obj: Element) => {
 /** @param {NS} ns **/
 export async function main(ns: NS) {
   //document.achievements.push("UNACHIEVABLE");
-  let boxes: Element[] = Array.from(
-    document.querySelectorAll("[class*=MuiBox-root]")
-  );
-  let box: Element | undefined = boxes.find((x: Element ) => hasPlayer(x));
+  let boxes: Element[] = Array.from(document.querySelectorAll('[class*=MuiBox-root]'));
+  let box: Element | undefined = boxes.find((x: Element) => hasPlayer(x));
 
   if (box === undefined) {
     return;

@@ -1,16 +1,10 @@
-import {
-  getTargets,
-  getHosts,
-  getThreadInfo,
-  pushHackScripts,
-} from "/lib/Servers.js";
-import { NS, Server } from "Bitburner";
+import { getTargets, getHosts, getThreadInfo, pushHackScripts } from '/lib/Servers.js';
+import { NS, Server } from 'Bitburner';
 
-/** @param {NS } ns */
 export async function main(ns: NS) {
-  ns.disableLog("ALL");
+  ns.disableLog('ALL');
   ns.tail();
-  const hackScript = "/bin/hack.js"
+  const hackScript = '/bin/hack.js';
 
   let targets: Server[] = getTargets(ns);
 
@@ -32,9 +26,7 @@ export async function main(ns: NS) {
 
     while (threads.hasRoom()) {
       if (ns.isRunning(hackScript, server.hostname, targets[i].hostname)) {
-        ns.print(
-          "WARN " + server.hostname + " looped around to repeat targets."
-        );
+        ns.print('WARN ' + server.hostname + ' looped around to repeat targets.');
         break;
       }
 
