@@ -4,7 +4,18 @@ import { findPath } from '/lib/Servers.js';
 export async function backdoor(ns: NS, host: string) {
   let server = ns.getServer(host);
 
-  if (server.backdoorInstalled || server.requiredHackingSkill > ns.getHackingLevel()) {
+  if (!server.hasAdminRights) {
+    ns.print(`Can not backdoor ${host}, you need admin rights.`);
+    return;
+  }
+
+  if (server.backdoorInstalled) {
+    ns.print(`You already have a backdoor installed on ${host}.`);
+    return;
+  }
+
+  if (server.requiredHackingSkill > ns.getHackingLevel()) {
+    ns.print(`Can not backdoor ${host}, you need a ${ns.getHackingLevel()} hacking level.`);
     return;
   }
 
