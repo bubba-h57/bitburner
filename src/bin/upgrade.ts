@@ -4,7 +4,7 @@ import { pushHackScripts, getThreadInfo, getTargets, getServerInfo } from '/lib/
 import { openPorts } from '/lib/Ports.js';
 
 export async function main(ns: NS) {
-  const sleepInterval = 60000 * 1;
+  const sleepInterval = 60000 * 0.5;
   const purchasedServerName = 'hacker';
   const minimumRam = 8192;
   let programNames = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe'];
@@ -19,13 +19,13 @@ export async function main(ns: NS) {
     let home = ns.getServer('home');
     if (ns.upgradeHomeCores()) {
       ns.print(`${new Date().toISOString()} Upgraded Home CPU Cores to ${home.cpuCores}`);
-      hackHome(ns, home, hackScript, scriptRamCost);
+      await hackHome(ns, home, hackScript, scriptRamCost);
     }
 
     // ns.print(`${new Date().toISOString()} RAM.`);
     if (ns.upgradeHomeRam()) {
       ns.print(`${new Date().toISOString()} Upgraded Home RAM to ${formatNumberShort(ns.getServerMaxRam('home'))}`);
-      hackHome(ns, home, hackScript, scriptRamCost);
+      await hackHome(ns, home, hackScript, scriptRamCost);
     }
 
     // ns.print(`${new Date().toISOString()} Server.`);
@@ -39,7 +39,7 @@ export async function main(ns: NS) {
       let threads = getThreadInfo(server, scriptRamCost, targets.length);
       await pushHackScripts(ns, server);
       let i = 0;
-      while (threads.hasRoom()) {
+      while (threads.hasRoom() && targets.length > 0) {
         if (ns.isRunning(hackScript, server.hostname, targets[i].hostname)) {
           ns.print(`${new Date().toISOString()} WARN ${server.hostname} looped around to repeat targets.`);
           break;

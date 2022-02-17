@@ -1,6 +1,7 @@
 import { NS, GangMemberInfo, GangGenInfo, GangTaskStats, GangMemberAscension } from 'Bitburner';
 import { Mafia } from '/lib/Mafia.js';
-
+import { compare } from '/lib/Helpers.js';
+import { config } from '/lib/Config.js';
 export class Mobster {
   protected ns: NS;
   protected mafia: Mafia;
@@ -13,6 +14,7 @@ export class Mobster {
   public tickCounter: number = 0;
   public isTraining: boolean = false;
   public ascensionThreshold: number;
+  protected index: number;
 
   constructor(ns: NS, mafia: Mafia, info: GangMemberInfo, index: number) {
     this.ns = ns;
@@ -20,6 +22,7 @@ export class Mobster {
     this.info = info;
     this.update();
     this.train();
+    this.index = index;
     this.ascensionThreshold = mafia.ascendThreshold + (11 - index) * mafia.ascendThresholdIncrement;
   }
 
@@ -36,11 +39,11 @@ export class Mobster {
   }
 
   public work(): void {
-    // this.equip();
     if (!this.train()) {
       if (!this.layLow()) {
         let optStat = this.mafia.optimalStat();
         let tasks = this.tasks();
+
         if (optStat == 'both money and respect') {
           // Hack to support a "optimized total" stat when trying to balance both money and wanted
           tasks.forEach((task) => (task[optStat] = task.money / 1000 + task.respect));
@@ -48,16 +51,22 @@ export class Mobster {
           tasks.forEach((task, idx) =>
             tasks.sort((a, b) => (idx % 2 == 0 ? b.respect - a.respect : b.money - a.money))
           );
+          let taskIndex = this.index % 2 == 0 ? 1 : 0;
+          this.setTask(tasks[taskIndex].name);
         } else {
           tasks.forEach((task) => tasks.sort((a, b) => b[optStat] - a[optStat]));
+          this.setTask(tasks[0].name);
         }
-        this.setTask(tasks[0].name);
       }
     }
   }
 
   public equip(): void {
+    /** Get available upgrades, then filter out what we already have. */
     let upgrades = this.equipmentAvailable().filter((x) => !this.upgrades.includes(x));
+    /** Now filter out any hacking specific upgrades, we are combat gang. */
+    upgrades = upgrades.filter((x) => !config('mafia.equipment.rootkit').includes(x));
+
     upgrades.forEach((upgrade: string) => {
       this.ns.gang.purchaseEquipment(this.name, upgrade);
     });
@@ -85,7 +94,11 @@ export class Mobster {
     if (task === this.task) {
       return true;
     }
-    this.ns.print(`${new Date().toISOString()} ${this.name} assigned to ${task}.`);
+    // If set to Warfare, we don't mess with it. The War script will reset it when it is time.
+    if (compare(task, 'Territory Warfare')) {
+      return true;
+    }
+    this.ns.print(`${this.name} assigned to ${task}.`);
     return this.ns.gang.setMemberTask(this.name, task);
   }
 

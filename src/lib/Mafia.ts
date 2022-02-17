@@ -30,14 +30,10 @@ export class Mafia {
   }
 
   public manage(): void {
-    this.warfare();
-    if (this.territory.warfare()) {
-      return;
-    }
-
     this.mobsters().forEach((mobster) => {
-      mobster.work();
       mobster.ascend();
+      mobster.equip();
+      mobster.work();
     });
   }
 
@@ -124,7 +120,7 @@ export class Mafia {
       return 'money';
     }
 
-    if (this.moneyAvailable() > 1e11 || this.gangInfo().respect < 9000) {
+    if (this.gangInfo().respect < 10000) {
       return 'respect';
     }
     return 'both money and respect';
