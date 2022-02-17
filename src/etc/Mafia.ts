@@ -54,5 +54,15 @@ export const mafia = {
       'DataJack',
       'Graphene Bone Lacings',
     ],
+    avoid: [
+      'NUKE Rootkit',
+      'Soulstealer Rootkit',
+      'Demon Rootkit',
+      'Hmap Node',
+      'Jack the Ripper',
+      'BitWire',
+      'Neuralstimulator',
+      'DataJack',
+    ],
   },
 };

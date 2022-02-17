@@ -68,7 +68,9 @@ export class Mobster {
     upgrades = upgrades.filter((x) => !config('mafia.equipment.rootkit').includes(x));
 
     upgrades.forEach((upgrade: string) => {
-      this.ns.gang.purchaseEquipment(this.name, upgrade);
+      if (this.ns.gang.purchaseEquipment(this.name, upgrade)) {
+        this.ns.print(`Purchased ${upgrade} for ${this.name}.`);
+      }
     });
   }
 
@@ -98,7 +100,7 @@ export class Mobster {
     if (compare(task, 'Territory Warfare')) {
       return true;
     }
-    this.ns.print(`${this.name} assigned to ${task}.`);
+
     return this.ns.gang.setMemberTask(this.name, task);
   }
 
