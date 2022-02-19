@@ -2,7 +2,6 @@ import { NS } from 'Bitburner';
 import { humanReadable } from '/lib/Helpers';
 
 export async function main(ns: NS) {
-  const maxPurchasableRam = 1048576;
   let ram = 2;
   ns.disableLog('disableLog');
   ns.disableLog('sleep');

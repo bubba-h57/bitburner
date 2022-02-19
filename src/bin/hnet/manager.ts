@@ -1,26 +1,13 @@
 import { formatDuration, formatMoney } from '/lib/Helpers.js';
 import { NodeStats, NS } from 'Bitburner';
+import { config } from '/lib/Config.js';
 
-let haveHacknetServers = true;
 let formulas = true;
+let haveHacknetServers = true;
 let options: { [x: string]: any; c: any; continuous: any; interval: any; toast: any };
 
-const argsSchema: [string, string | number | boolean | string[]][] = [
-  ['max-payoff-time', '1h'], // Controls how far to upgrade hacknets. Can be a number of seconds, or an expression of minutes/hours (e.g. '123m', '4h')
-  ['c', true], // Set to true to run continuously, otherwise, it runs once
-  ['continuous', true],
-  ['interval', 1000], // Rate at which the program purchases upgrades when running continuously
-  ['max-spend', Number.MAX_VALUE], // The maximum amount of money to spend on upgrades
-  ['toast', true], // Set to true to toast purchases
-];
-
-export function autocomplete(data, _) {
-  data.flags(argsSchema);
-  return [];
-}
-
 export async function main(ns: NS) {
-  options = ns.flags(argsSchema);
+  options = config('hack_net');
   const continuous = options.c || options.continuous;
   const interval = options.interval;
   let maxSpend = options['max-spend'];

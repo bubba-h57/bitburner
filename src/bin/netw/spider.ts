@@ -8,9 +8,6 @@ import { getServerInfo } from 'lib/Servers.js';
  *
  *  --money      Will give you the list of servers in order of max money
  *  --backdoors  Will provide a list of servers that you could install backdoors on, but haven't yet.
- *
- * @param {NS} ns
- * @returns null
  */
 export async function main(ns: NS) {
   let servers = getServerInfo(ns);
@@ -28,9 +25,8 @@ export async function main(ns: NS) {
 /**
  * Just prints out the list in alphabetical order.
  *
- * @param {Server[] } servers
  */
-function orderDefault(ns: NS, servers: any[]) {
+function orderDefault(ns: NS, servers: Server[]) {
   servers
     .sort(function (a: { hostname: string }, b: { hostname: string }) {
       let aHostname = a.hostname.toUpperCase();
@@ -45,10 +41,8 @@ function orderDefault(ns: NS, servers: any[]) {
 /**
  * Prints a list of servers that you could backdoor.
  *
- * @param {import(".").Server[] } servers
- * @param {number} currskill
  */
-function findBackdoors(servers: any[], currskill: number) {
+function findBackdoors(servers: Server[], currskill: number) {
   servers
     .filter(function (server: { hasAdminRights: any; backdoorInstalled: any; requiredHackingSkill: number }) {
       return server.hasAdminRights && !server.backdoorInstalled && server.requiredHackingSkill <= currskill;
@@ -60,10 +54,9 @@ function findBackdoors(servers: any[], currskill: number) {
 
 /**
  * Prints a list of server in order of most profitable descending.
- *
- * @param {import(".").Server[] } servers
+
  */
-function orderByMoney(servers: any[], currskill: number) {
+function orderByMoney(servers: Server[], currskill: number) {
   servers
     .sort((a: { moneyMax: number }, b: { moneyMax: number }) => b.moneyMax - a.moneyMax)
     .filter(

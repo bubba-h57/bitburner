@@ -1,6 +1,6 @@
 import type React_Type from 'react';
-import { findPath, getAllServers } from '/lib/Servers.js';
-import renderCustomModal, { doc, EventHandlerQueue } from '/lib/Window.js';
+import { getAllServers } from '/lib/Servers.js';
+import renderCustomModal, { EventHandlerQueue } from '/lib/Window.js';
 
 declare var React: typeof React_Type;
 
