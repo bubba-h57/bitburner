@@ -2,6 +2,7 @@ import { gyms } from '/etc/Gyms.js';
 import { factions } from '/etc/Factions.js';
 import { mafia } from '/etc/Mafia.js';
 import { crime } from '/etc/Crime.js';
+import { purchased_servers } from '/etc/PurchasedServers.js';
 
 export function config(key: string, alternative: any = null): any | null {
   return Config.get(key, alternative);
@@ -13,6 +14,7 @@ class Config {
     factions: factions,
     mafia: mafia,
     crime: crime,
+    purchased_servers: purchased_servers,
   };
 
   public static get(key: string, alternative: any = null): any | null {

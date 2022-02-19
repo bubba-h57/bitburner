@@ -41,6 +41,7 @@ export async function main(ns: NS) {
       contracts[index].type.padEnd(contractTypeLength + 3, ' '),
       solution,
     ].join('');
+    ns.tprint(output);
   }
 }
 
