@@ -27,7 +27,7 @@ export async function main(ns: NS) {
 
       let targets: Server[] = getTargets(ns);
       let i = 0;
-      let scriptRamCost = ns.getScriptRam(config('purchased_servers.hack_script');
+      let scriptRamCost = ns.getScriptRam(config('purchased_servers.hack_script'));
       let server = ns.getServer(hostname);
       let threads = getThreadInfo(server, scriptRamCost, targets.length);
 
@@ -39,7 +39,12 @@ export async function main(ns: NS) {
           break;
         }
 
-        ns.exec(config('purchased_servers.hack_script'), server.hostname, threads.numberOfThreadsToRun, targets[i].hostname);
+        ns.exec(
+          config('purchased_servers.hack_script'),
+          server.hostname,
+          threads.numberOfThreadsToRun,
+          targets[i].hostname
+        );
 
         threads.incrementTotal();
         i++;
