@@ -5,7 +5,7 @@ export async function main(ns: NS) {
   ns.tail();
 
   while (true) {
-    let karma = ns.extra.heart.break();
+    let karma = ns.heart.break();
 
     ns.clearLog();
     ns.print(`Current Karma: ${karma}`);

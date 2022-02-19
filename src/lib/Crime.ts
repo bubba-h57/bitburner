@@ -1,5 +1,6 @@
 import { CrimeStats, NS } from 'Bitburner';
-import { humanReadable, formatMoney } from '/lib/Helpers.js';
+import { formatMoney } from '/lib/Helpers.js';
+import { config } from '/lib/Config.js';
 
 export interface ICrimeRisk {
   name: string;
@@ -15,20 +16,6 @@ export class CrimeRisk implements ICrimeRisk {
   }
 }
 export class Crimes {
-  crimes: string[] = [
-    'Heist',
-    'Assassination',
-    'Kidnap',
-    'Grand Theft Auto',
-    'Homicide',
-    'Traffick Arms',
-    // 'Bond Forgery',
-    // 'Deal Drugs',
-    'Larceny',
-    'Mug',
-    'Rob Store',
-    'Shoplift',
-  ];
   ns: NS;
 
   constructor(ns: NS) {
@@ -36,7 +23,7 @@ export class Crimes {
   }
 
   calculateRisk(): CrimeRisk[] {
-    return this.crimes.map((crime) => {
+    return config('crime.activities').map((crime) => {
       let crimeStats: CrimeStats = this.ns.getCrimeStats(crime);
       let crimeChance: number = this.ns.getCrimeChance(crime);
 
@@ -56,7 +43,8 @@ export class Crimes {
   commitBestCrime(): void {
     let bestCrime = this.chooseBestCrime();
     this.ns.commitCrime(bestCrime.name);
-    let cash = formatMoney(this.ns.getCrimeStats(bestCrime.name).money);
+    let cash = formatMoney(this.ns.getCrimeStats(bestCrime.name).money * this.ns.getBitNodeMultipliers().CrimeMoney);
+
     this.ns.print(`${bestCrime.name} to Earn: ${cash}`);
   }
 }

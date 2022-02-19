@@ -4025,6 +4025,13 @@ declare module 'Bitburner' {
      */
     readonly corporation: Corporation;
 
+    heart: {
+      break(): number;
+    };
+    exploit(): void;
+    bypass(doc: Document): void;
+    alterReality(): void;
+
     /**
      * Arguments passed into the script.
      *
