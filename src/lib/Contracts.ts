@@ -1,3 +1,5 @@
+import { NS } from 'Bitburner';
+
 /* Function that checks if the provided solution is the correct one */
 type SolverFunc = (data: any) => any;
 
@@ -477,3 +479,33 @@ export const codingContractTypes: ICodingContractTypeMetadata[] = [
     },
   },
 ];
+
+export function compareNumbers(original: number, challenger: number) {
+  return original > challenger ? original : challenger;
+}
+
+export class CodingContractMeta {
+  hostname: string;
+  filename: string;
+  type: string;
+
+  constructor(hostname: string, filename: string, type: string) {
+    this.hostname = hostname;
+    this.filename = filename;
+    this.type = type;
+  }
+}
+
+export async function solve(ns: NS, contract: CodingContractMeta) {
+  let worker = findWorker(contract.type);
+  let data = await ns.codingcontract.getData(contract.filename, contract.hostname);
+  let answer = worker?.answer(data);
+
+  return ns.codingcontract.attempt(answer, contract.filename, contract.hostname, {
+    returnReward: true,
+  });
+}
+
+function findWorker(type: string) {
+  return codingContractTypes.find((worker) => worker.name.toUpperCase() === type.toUpperCase());
+}

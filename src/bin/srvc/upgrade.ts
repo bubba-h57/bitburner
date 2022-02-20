@@ -9,13 +9,19 @@ export async function main(ns: NS) {
   const minimumRam = 8192;
   let programNames = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe'];
   let needPorthack = true;
-  const hackScript = '/bin/hack.js';
+  const hackScript = '/bin/hack/hack.js';
   let scriptRamCost = ns.getScriptRam(hackScript);
 
   ns.disableLog('ALL');
   ns.tail();
   ns.print(`${new Date().toISOString()} Start the loop.`);
-  while (ns.getServerMaxRam('home') < 2 ** 20 || ns.getServer('home').cpuCores < 8) {
+
+  while (
+    ns.getPurchasedServers().length < ns.getPurchasedServerLimit() ||
+    ns.getServerMaxRam('home') < Math.pow(2, 30) ||
+    ns.getServer('home').cpuCores < 8 ||
+    ns.getPurchasedServers().length < ns.getPurchasedServerLimit()
+  ) {
     let home = ns.getServer('home');
     if (ns.upgradeHomeCores()) {
       ns.print(`${new Date().toISOString()} Upgraded Home CPU Cores to ${home.cpuCores}`);
@@ -29,7 +35,14 @@ export async function main(ns: NS) {
     }
 
     // ns.print(`${new Date().toISOString()} Server.`);
-    let targetRam = ns.getServerMaxRam('home') > minimumRam ? ns.getServerMaxRam('home') : minimumRam;
+    let targetRam = minimumRam;
+    if (ns.getServerMaxRam('home') < Math.pow(2, 20) && ns.getServerMaxRam('home') > minimumRam) {
+      targetRam = ns.getServerMaxRam('home');
+    }
+    if (ns.getServerMaxRam('home') > Math.pow(2, 20)) {
+      targetRam = Math.pow(2, 20);
+    }
+
     let newHost = ns.purchaseServer(purchasedServerName, targetRam);
     if (newHost !== '') {
       ns.print(`${new Date().toISOString()} Purchased Host: ${newHost}`);

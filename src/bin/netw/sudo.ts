@@ -1,17 +1,12 @@
 import { NS } from 'Bitburner';
-import { out, hasFlag } from '/lib/Term.js';
 import { getServerInfo, findPath } from '/lib/Servers.js';
-import { portsWeCanHack, openPorts } from '/lib/Ports.js';
+import { openPorts } from '/lib/Ports.js';
 
 export async function main(ns: NS) {
   ns.disableLog('ALL');
   ns.enableLog('installBackdoor');
   ns.tail();
   let servers = getServerInfo(ns);
-
-  if (hasFlag(ns, '--ports')) {
-    out('<span style="color: purple;">Number of Ports we can hack: ' + portsWeCanHack(ns)) + '</span>';
-  }
 
   servers.forEach(async (server: { hostname: any }) => await openPorts(ns, server.hostname));
   servers = getServerInfo(ns);
@@ -23,7 +18,7 @@ export async function main(ns: NS) {
     }
 
     if (server.openPortCount >= server.numOpenPortsRequired && !server.hasAdminRights) {
-      out(`<span style="color: red;">Nuking ${server.hostname}</span>`);
+      ns.print(`Nuking ${server.hostname}`);
       ns.nuke(server.hostname);
       server = ns.getServer(server.hostname);
     }

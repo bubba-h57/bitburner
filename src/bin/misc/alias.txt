@@ -1,8 +1,24 @@
 alias init="home; run bin/repo/init.js";
-alias ssh="home; run bin/net/ssh.js";
-alias pwn="home; run bin/net/sudo.js";
-alias pen="home; run bin/net/pentest.js";
-alias hack="home; run bin/hack/hacker.js";
 alias delete="home; run bin/repo/delete.js";
 alias pull="home; run bin/repo/pull.js";
-alias upgrade="home; run bin/service/upgrade.js";
+
+alias ssh="home; run bin/netw/ssh.js";
+alias pwn="home; run bin/netw/sudo.js";
+alias pen="home; run bin/netw/pentest.js";
+alias spider="home; run bin/netw/spider.js";
+alias priceguide="home; run bin/netw/prices.js";
+
+
+alias hack="home; run bin/hack/hacker.js";
+
+alias upgrade="home; run bin/srvc/upgrade.js";
+alias workout="home; run bin/srvc/workout.js";
+
+alias contracts="home; run bin/cntr/contractor.js";
+
+alias hacknet="home; run bin/hnet/manager.js";
+alias test="home; run bin/misc/test.js";
+
+alias crime="home; run bin/slum/criminal.js"
+alias gang="home; run bin/slum/gang.js"
+alias karma="home; run bin/slum/karma.js"

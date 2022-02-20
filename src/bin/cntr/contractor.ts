@@ -1,6 +1,6 @@
-import { getAllServers } from '/lib/Servers.js';
-import { codingContractTypes } from '/lib/Contracts.js';
 import { NS } from 'Bitburner';
+import { getAllServers } from '/lib/Servers.js';
+import { compareNumbers, CodingContractMeta, solve } from '/lib/Contracts.js';
 
 export async function main(ns: NS) {
   const servers = getAllServers(ns, 'home');
@@ -8,18 +8,6 @@ export async function main(ns: NS) {
   let contractLength = 35;
   let contractTypeLength = 0;
   let contracts: CodingContractMeta[] = [];
-
-  class CodingContractMeta {
-    hostname: string;
-    filename: string;
-    type: string;
-
-    constructor(hostname: string, filename: string, type: string) {
-      this.hostname = hostname;
-      this.filename = filename;
-      this.type = type;
-    }
-  }
 
   servers.forEach(function (hostname) {
     ns.ls(hostname, '.cct').forEach(function (contractFilename: string) {
@@ -32,7 +20,7 @@ export async function main(ns: NS) {
   });
 
   for (let index = 0; index < contracts.length; index++) {
-    let solution = await solve(contracts[index], ns);
+    let solution = await solve(ns, contracts[index]);
     let result = solution !== '' ? '  SOLVED   ' : 'UNSOLVED   ';
     let output = [
       contracts[index].hostname.padEnd(hostnameLength + 3, ' '),
@@ -43,31 +31,4 @@ export async function main(ns: NS) {
     ].join('');
     ns.tprint(output);
   }
-}
-
-function compareNumbers(original: number, challenger: number) {
-  return original > challenger ? original : challenger;
-}
-
-/** @param {NS} ns */
-async function solve(
-  contract: { type?: any; filename?: any; hostname?: any },
-  ns: {
-    codingcontract: {
-      getData: (arg0: any, arg1: any) => any;
-      attempt: (arg0: any, arg1: any, arg2: any, arg3: { returnReward: boolean }) => any;
-    };
-  }
-) {
-  let worker = findWorker(contract.type);
-  let data = await ns.codingcontract.getData(contract.filename, contract.hostname);
-  let answer = worker?.answer(data);
-
-  return ns.codingcontract.attempt(answer, contract.filename, contract.hostname, {
-    returnReward: true,
-  });
-}
-
-function findWorker(type: string) {
-  return codingContractTypes.find((worker) => worker.name.toUpperCase() === type.toUpperCase());
 }
