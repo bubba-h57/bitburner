@@ -1,6 +1,6 @@
-import { getTargets, getHosts, getThreadInfo, pushHackScripts } from '/lib/Servers.js';
 import { NS, Server } from 'Bitburner';
 import { config } from '/lib/Config.js';
+import { getTargets, getHosts, getThreadInfo, pushHackScripts } from '/lib/Servers.js';
 
 export async function main(ns: NS) {
   ns.disableLog('ALL');

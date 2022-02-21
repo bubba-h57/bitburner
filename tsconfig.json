@@ -11,6 +11,9 @@
       ],
       "/etc/*": [
         "etc/*"
+      ],
+      "Bitburner": [
+        "../Bitburner.d.ts"
       ]
     },
     "outDir": "build/",
@@ -20,6 +23,6 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
   ]
 }

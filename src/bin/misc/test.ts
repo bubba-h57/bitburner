@@ -1,10 +1,7 @@
 import { NS } from 'Bitburner';
-import { config } from '/lib/Config.js';
+import { cachedScan } from '/lib/Caching/scan.js';
 
 export async function main(ns: NS) {
-  ns.tprint(config('gyms'));
-
-  ns.tprint(config('gyms.locations'));
-  ns.tprint(config('gyms.locations.0'));
-  ns.tprint(config('jims.locations.0', 'gym, not jim'));
+  ns.tprint('home: ' + (await cachedScan(ns)));
+  ns.tprint('n00dles: ' + (await cachedScan(ns, 'n00dles')));
 }

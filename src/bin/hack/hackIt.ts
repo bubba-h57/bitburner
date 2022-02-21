@@ -7,14 +7,7 @@ export async function main(ns: NS) {
   // Infinite loop that continously hacks/grows/weakens the target server
   while (true) {
     let target = await getTarget(ns);
-
-    // Defines how much money a server should have before we hack it
-    // In this case, it is set to 75% of the server's max money
     var moneyThresh = ns.getServerMaxMoney(target) * 0.75;
-
-    // Defines the maximum security level the target server can
-    // have. If the target's security level is higher than this,
-    // we'll weaken it before doing anything else
     var securityThresh = ns.getServerMinSecurityLevel(target) + 2;
 
     if (ns.getServerSecurityLevel(target) > securityThresh) {
@@ -34,20 +27,15 @@ export async function main(ns: NS) {
     log(ns, `Stole ${humanReadable(stolen)} from ${target}'s bank account.`, 'WARNING');
   }
 }
-/**
- *
- * @param {import(".").NS } ns
- * @param {*} message
- */
-function log(ns, message, loglevel = 'INFO') {
+
+function log(ns: NS, message: string, loglevel = 'INFO') {
   let logLevels = ['EMERGENCY', 'ALERT', 'CRITICAL', 'ERROR', 'WARNING', 'NOTICE', 'INFO', 'DEBUG'];
 
   const timestamp = new Date().toISOString();
   ns.print(timestamp + ' '.repeat(3) + loglevel.padEnd(12, ' ') + message);
 }
 
-/** @param {import(".").NS } ns */
-async function configLogs(ns) {
+async function configLogs(ns: NS) {
   let logs = [
     'disableLog',
     'getServerMaxMoney',
@@ -59,10 +47,10 @@ async function configLogs(ns) {
     'hack',
   ];
 
-  logs.forEach(async (command) => await ns.disableLog(command));
+  logs.forEach(async (command) => ns.disableLog(command));
 }
 
-async function getTarget(ns) {
+async function getTarget(ns: NS) {
   if (ns.args[0] !== undefined) {
     return ns.args[0];
   }
