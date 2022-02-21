@@ -125,7 +125,7 @@ let noFocus = false; // Can be set via command line to disable doing work that r
 let noStudying = false; // Disable studying for Charisma. Useful in longer resets when Cha augs are insufficient to meet promotion requirements (Also disabled with --no-focus)
 let noCrime = false; // Disable doing crimes at all. (Also disabled with --no-focus)
 let crimeFocus = false; // Useful in crime-focused BNs when you want to focus on crime related factions
-let fastCrimesOnly = false; // Can be set via command line argument
+let fastCrimesOnly = true; // Can be set via command line argument
 let prioritizeInvites = false;
 let hasFocusPenaly = true;
 let shouldFocusAtWork = false; // Whether we should focus on work or let it be backgrounded (based on whether "Neuroreceptor Management Implant" is owned, or "--no-focus" is specified)
@@ -150,7 +150,7 @@ const argsSchema = [
   ['no-coding-contracts', false], // Disable purchasing coding contracts for reputation
   ['no-crime', false], // Disable doing crimes at all. (Also disabled with --no-focus)
   ['crime-focus', false], // Useful in crime-focused BNs when you want to focus on crime related factions
-  ['fast-crimes-only', false], // Assasination and Heist are so slow, I can see people wanting to disable them just so they can interrupt at will.
+  ['fast-crimes-only', true], // Assasination and Heist are so slow, I can see people wanting to disable them just so they can interrupt at will.
   ['invites-only', false], // Just work to get invites, don't work for augmentations / faction rep
   ['prioritize-invites', false], // Prioritize working for as many invites as is practical before starting to grind for faction reputation
 ];

@@ -1,4 +1,5 @@
 import { NS, Server } from 'Bitburner';
+import { config } from '/lib/Config';
 import { cachedScan } from '/lib/Caching/functions.js';
 /**
  * Get the list of servers connected to a server.
@@ -93,7 +94,7 @@ export async function pushHackScripts(ns: NS, server: Server) {
   if (server.hostname === 'home') {
     return;
   }
-  await ns.scp(['/bin/hack.js', '/lib/Helpers.js', '/lib/Term.js'], 'home', server.hostname);
+  await ns.scp(config('purchased_servers.hack_set'), 'home', server.hostname);
 }
 
 export class ThreadInfo {

@@ -15,9 +15,11 @@ export async function backdoor(ns: NS, host: string) {
   }
 
   if (server.requiredHackingSkill > ns.getHackingLevel()) {
-    ns.print(`Can not backdoor ${host}, you need a ${ns.getHackingLevel()} hacking level.`);
+    ns.print(`Can not backdoor ${host}, you need a ${server.requiredHackingSkill} hacking level.`);
     return;
   }
+
+  ns.print(`Attempting to penetrate ${host}`);
 
   let path = await findPath(ns, host);
   path.forEach((host: string) => ns.connect(host));
