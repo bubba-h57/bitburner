@@ -10,7 +10,7 @@ import { getServerInfo } from 'lib/Servers.js';
  *  --backdoors  Will provide a list of servers that you could install backdoors on, but haven't yet.
  */
 export async function main(ns: NS) {
-  let servers = getServerInfo(ns);
+  let servers = await getServerInfo(ns);
 
   if (hasFlag(ns, '--money')) {
     return orderByMoney(servers, ns.getHackingLevel());

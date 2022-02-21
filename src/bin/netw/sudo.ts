@@ -6,10 +6,10 @@ export async function main(ns: NS) {
   ns.disableLog('ALL');
   ns.enableLog('installBackdoor');
   ns.tail();
-  let servers = getServerInfo(ns);
+  let servers = await getServerInfo(ns);
 
   servers.forEach(async (server: { hostname: any }) => await openPorts(ns, server.hostname));
-  servers = getServerInfo(ns);
+  servers = await getServerInfo(ns);
 
   for (let i = 0; i < servers.length; i++) {
     let server = servers[i];

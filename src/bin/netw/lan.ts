@@ -25,7 +25,7 @@ export async function main(ns: NS) {
       ns.print(`Server ${hostname} was purchased.`);
       ++index;
 
-      let targets: Server[] = getTargets(ns);
+      let targets: Server[] = await getTargets(ns);
       let i = 0;
       let scriptRamCost = ns.getScriptRam(config('purchased_servers.hack_script'));
       let server = ns.getServer(hostname);

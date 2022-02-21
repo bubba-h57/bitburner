@@ -1,5 +1,5 @@
 import { NS, Server } from 'Bitburner';
-
+import { cachedScan } from '/lib/Caching/functions.js';
 /**
  * Get the list of servers connected to a server.
  *
@@ -8,7 +8,7 @@ import { NS, Server } from 'Bitburner';
  * array are strings.
  *
  */
-export function getAllServers(ns: NS, rootHost = 'home'): string[] {
+export async function getAllServers(ns: NS, rootHost = 'home'): Promise<string[]> {
   ns.disableLog('scan');
   let pendingScan = [rootHost];
   const list = new Set(pendingScan);
@@ -16,7 +16,8 @@ export function getAllServers(ns: NS, rootHost = 'home'): string[] {
   while (pendingScan.length) {
     const hostname: string = pendingScan.shift() ?? '';
     list.add(hostname);
-    pendingScan.push(...ns.scan(hostname));
+    let daScan = await cachedScan(ns, hostname);
+    pendingScan.push(...daScan);
     pendingScan = pendingScan.filter((host) => !list.has(host));
   }
 
@@ -27,10 +28,10 @@ export function getAllServers(ns: NS, rootHost = 'home'): string[] {
  * Returns an array of Server objects
  * from the array of hostnames passed in.
  */
-export function getServerInfo(ns: NS, servers?: string[]): Server[] {
+export async function getServerInfo(ns: NS, servers?: string[]): Promise<Server[]> {
   let serverData: Server[] = [];
 
-  servers = servers ?? getAllServers(ns);
+  servers = servers ?? (await getAllServers(ns));
 
   servers.forEach(function (hostname: any) {
     let server: Server = ns.getServer(hostname);
@@ -64,7 +65,7 @@ export async function findPath(ns: NS, destination: string = '', current: string
 
   while ((hostname = queue.shift())) {
     let path = links[hostname];
-    let neighboors = ns.scan(hostname);
+    let neighboors = await cachedScan(ns, hostname);
 
     for (let neighboor of neighboors) {
       if (links[neighboor] === undefined) {
@@ -125,16 +126,18 @@ export function getTargetRam(server: Server) {
   return server.hostname === 'home' ? server.maxRam - server.ramUsed - 100 : server.maxRam;
 }
 
-export function getTargets(ns: NS): Server[] {
-  let servers = getServerInfo(ns).filter(
+export async function getTargets(ns: NS): Promise<Server[]> {
+  let servers = await getServerInfo(ns);
+  servers = servers.filter(
     (server) => server.hasAdminRights && server.requiredHackingSkill <= ns.getHackingLevel() && server.moneyMax > 0
   );
   servers.sort((a, b) => b.moneyMax - a.moneyMax);
   return servers;
 }
 
-export function getHosts(ns: NS): Server[] {
-  let servers = getServerInfo(ns).filter(
+export async function getHosts(ns: NS): Promise<Server[]> {
+  let servers = await getServerInfo(ns);
+  servers = servers.filter(
     (server) => server.purchasedByPlayer || server.hostname === 'home' || (server.hasAdminRights && server.maxRam > 0)
   );
   servers.sort((a, b) => b.maxRam - a.maxRam);

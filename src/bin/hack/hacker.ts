@@ -6,8 +6,8 @@ export async function main(ns: NS) {
   ns.disableLog('ALL');
   ns.tail();
   let i = 0;
-  let hosts: Server[] = getHosts(ns);
-  let targets: Server[] = getTargets(ns);
+  let hosts: Server[] = await getHosts(ns);
+  let targets: Server[] = await getTargets(ns);
   let scriptRamCost = ns.getScriptRam(config('purchased_servers.hack_script'));
 
   // Now we will crank 'em all

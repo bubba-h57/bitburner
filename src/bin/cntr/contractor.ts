@@ -3,7 +3,7 @@ import { getAllServers } from '/lib/Servers.js';
 import { compareNumbers, CodingContractMeta, solve } from '/lib/Contracts.js';
 
 export async function main(ns: NS) {
-  const servers = getAllServers(ns, 'home');
+  const servers = await getAllServers(ns, 'home');
   let hostnameLength = 20;
   let contractLength = 35;
   let contractTypeLength = 0;

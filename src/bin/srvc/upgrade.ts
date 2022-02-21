@@ -2,6 +2,7 @@ import { NS, Server } from 'Bitburner';
 import { formatNumberShort } from '/lib/Helpers.js';
 import { pushHackScripts, getThreadInfo, getTargets, getServerInfo } from '/lib/Servers.js';
 import { openPorts } from '/lib/Ports.js';
+import { cachedScan } from '/lib/Caching/functions';
 
 export async function main(ns: NS) {
   const sleepInterval = 60000 * 0.5;
@@ -46,7 +47,7 @@ export async function main(ns: NS) {
     let newHost = ns.purchaseServer(purchasedServerName, targetRam);
     if (newHost !== '') {
       ns.print(`${new Date().toISOString()} Purchased Host: ${newHost}`);
-      let targets: Server[] = getTargets(ns);
+      let targets: Server[] = await getTargets(ns);
 
       let server = ns.getServer(newHost);
       let threads = getThreadInfo(server, scriptRamCost, targets.length);
@@ -74,11 +75,11 @@ export async function main(ns: NS) {
     }
 
     // ns.print(`${new Date().toISOString()} Port Hacks.`);
-    if (canShop(ns) && needPorthack) {
+    if ((await canShop(ns)) && needPorthack) {
       for (const prog of programNames) {
         if (!ns.fileExists(prog, 'home') && ns.purchaseProgram(prog)) {
           ns.print(`${new Date().toISOString()} Purchased ${prog}`);
-          for (let server of getServerInfo(ns)) {
+          for (let server of await getServerInfo(ns)) {
             await openPorts(ns, server.hostname);
           }
         } else if (!ns.fileExists(prog, 'home')) {
@@ -93,13 +94,14 @@ export async function main(ns: NS) {
   }
 }
 
-function canShop(ns: NS): boolean {
-  return ns.scan('home').includes('darkweb');
+async function canShop(ns: NS): Promise<boolean> {
+  let scan = await cachedScan(ns, 'home');
+  return scan.includes('darkweb');
 }
 
 async function hackHome(ns: NS, home: Server, hackScript: string, scriptRamCost: number) {
   ns.scriptKill(hackScript, 'home');
-  let targets: Server[] = getTargets(ns);
+  let targets: Server[] = await getTargets(ns);
   let threads = getThreadInfo(home, scriptRamCost, targets.length);
   let i = 0;
   while (threads.hasRoom()) {
