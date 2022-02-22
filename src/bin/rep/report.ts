@@ -32,7 +32,7 @@ export async function main(ns: NS) {
   }
 
   await ns.write(
-    'gFactions.txt',
+    cacheName,
     tempStatus.map((n) => n.toString()),
     'w'
   );
