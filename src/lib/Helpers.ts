@@ -57,7 +57,9 @@ export function humanReadableByteSize(bytes: number, size = false, decimalPoints
  * @returns {boolean}
  */
 export function compare(left: string, right: string, noCase: boolean = true): boolean {
-  return noCase ? left.toLowerCase() === right.toLowerCase() : left === right;
+  left = left ?? '';
+  right = right ?? '';
+  return noCase ? left.toString().toLowerCase() === right.toString().toLowerCase() : left === right;
 }
 
 /**

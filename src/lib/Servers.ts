@@ -1,6 +1,7 @@
 import { NS, Server } from 'Bitburner';
 import { config } from '/lib/Config';
 import { cachedScan } from '/lib/Caching/functions.js';
+
 /**
  * Get the list of servers connected to a server.
  *
@@ -117,10 +118,10 @@ export class ThreadInfo {
   }
 }
 
-export function getThreadInfo(server: Server, scriptCost: number, mumberOfTargets: number): ThreadInfo {
+export function getThreadInfo(server: Server, scriptCost: number, numberOfTargets: number): ThreadInfo {
   let targRam = getTargetRam(server);
   let possible = targRam / scriptCost;
-  return new ThreadInfo(possible, Math.ceil(possible / mumberOfTargets), 0);
+  return new ThreadInfo(possible, Math.ceil(possible / numberOfTargets), 0);
 }
 
 export function getTargetRam(server: Server) {

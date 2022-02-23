@@ -33,7 +33,8 @@ export async function main(ns: NS) {
       city = locations.find((gym) => compare(gym.location, ns.getPlayer().location)).city;
       gym = locations.find((gym) => compare(gym.location, ns.getPlayer().location)).gym;
     } else {
-      ns.tprint('ERROR: No gym available at the moment');
+      city = locations[1].city;
+      gym = locations[1].gym;
     }
   }
 

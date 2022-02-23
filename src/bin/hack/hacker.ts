@@ -1,6 +1,7 @@
 import { NS, Server } from 'Bitburner';
 import { config } from '/lib/Config.js';
 import { getTargets, getHosts, getThreadInfo, pushHackScripts } from '/lib/Servers.js';
+import { formatNumberShort } from '/lib/Helpers';
 
 export async function main(ns: NS) {
   ns.disableLog('ALL');
@@ -8,7 +9,7 @@ export async function main(ns: NS) {
   let i = 0;
   let hosts: Server[] = await getHosts(ns);
   let targets: Server[] = await getTargets(ns);
-  let scriptRamCost = ns.getScriptRam(config('purchased_servers.hack_script'));
+  let scriptRamCost = ns.getScriptRam(config('purchased_servers.hack_script'), 'home');
 
   // Now we will crank 'em all
   for (let n = 0; n < hosts.length; n++) {
@@ -19,8 +20,10 @@ export async function main(ns: NS) {
     ns.scriptKill(config('purchased_servers.hack_script'), server.hostname);
     ns.print(`  - Running ${config('purchased_servers.hack_script')}`);
 
-    await pushHackScripts(ns, server);
-
+    if (server.hostname !== 'home') {
+      await pushHackScripts(ns, server);
+    }
+    ns.print(`  - ${server.hostname} has room for ${formatNumberShort(threads.possibleThreadsToRun)} Threads.`);
     while (threads.hasRoom()) {
       if (ns.isRunning(config('purchased_servers.hack_script'), server.hostname, targets[i].hostname)) {
         ns.print('WARN ' + server.hostname + ' looped around to repeat targets.');
