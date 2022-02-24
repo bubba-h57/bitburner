@@ -16,6 +16,11 @@ export async function main(ns: NS) {
     let server = hosts[n];
     let threads = getThreadInfo(server, scriptRamCost, targets.length);
     ns.print(server.hostname);
+    if (threads.numberOfThreadsToRun < 1) {
+      ns.print(`${server.hostname} has no room for Threads.`);
+      continue;
+    }
+
     ns.print(`  - Killing ${config('purchased_servers.hack_script')}`);
     ns.scriptKill(config('purchased_servers.hack_script'), server.hostname);
     ns.print(`  - Running ${config('purchased_servers.hack_script')}`);
