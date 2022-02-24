@@ -17,4 +17,12 @@ export async function main(ns: NS) {
     }
     ns.tprintf(msg);
   });
+  ns.ls(ns.getHostname(), 'Temp/').forEach(function (repoFilename: string) {
+    let result = ns.rm(repoFilename);
+    let msg = `Failed to delete ${repoFilename}.`;
+    if (result) {
+      msg = `Successfully deleted ${repoFilename}.`;
+    }
+    ns.tprintf(msg);
+  });
 }
