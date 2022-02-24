@@ -4,6 +4,7 @@ import { mafia } from '/etc/Mafia.js';
 import { crime } from '/etc/Crime.js';
 import { purchased_servers } from '/etc/PurchasedServers.js';
 import { hack_net } from '/etc/HackNet.js';
+import { universities } from '/etc/Universities.js';
 
 export function config(key: string, alternative: any = null): any | null {
   return Config.get(key, alternative);
@@ -17,6 +18,7 @@ class Config {
     crime: crime,
     purchased_servers: purchased_servers,
     hack_net: hack_net,
+    universities: universities,
   };
 
   public static get(key: string, alternative: any = null): any | null {

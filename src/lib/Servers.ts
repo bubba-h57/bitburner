@@ -119,13 +119,32 @@ export class ThreadInfo {
 }
 
 export function getThreadInfo(server: Server, scriptCost: number, numberOfTargets: number): ThreadInfo {
-  let targRam = getTargetRam(server);
-  let possible = targRam / scriptCost;
-  return new ThreadInfo(possible, Math.ceil(possible / numberOfTargets), 0);
+  let targetRam = getTargetRam(server);
+  let possible = 0;
+  let target = 0;
+
+  if (targetRam > scriptCost) {
+    possible = Math.ceil(targetRam / scriptCost);
+  }
+
+  if (possible > numberOfTargets) {
+    target = Math.ceil(possible / numberOfTargets);
+  }
+
+  return new ThreadInfo(possible, target, 0);
 }
 
 export function getTargetRam(server: Server) {
-  return server.hostname === 'home' ? server.maxRam - server.ramUsed - 100 : server.maxRam;
+  let result = server.maxRam;
+
+  if (server.hostname === 'home') {
+    if (server.maxRam < 100 || server.maxRam <= server.ramUsed + 100) {
+      result = 0;
+    }
+    result = server.maxRam - (server.ramUsed + 100);
+  }
+
+  return result;
 }
 
 export async function getTargets(ns: NS): Promise<Server[]> {

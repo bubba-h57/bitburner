@@ -1,6 +1,5 @@
 import { NS } from 'Bitburner';
 import { config } from '/lib/Config.js';
-import { compare } from '/lib/Helpers';
 
 const argsSchema: [string, boolean][] = [
   ['initial', true],
@@ -14,7 +13,8 @@ export async function main(ns: NS) {
   let city: string = locations[0].city;
   let gym: string = locations[0].gym;
   let stat: string = '';
-  let level: string = '';
+  let level: string = 'initial';
+  let shouldContinue: boolean = true;
 
   if (flags.initial) {
     level = 'initial';
@@ -24,30 +24,56 @@ export async function main(ns: NS) {
     level = 'advanced';
   }
 
-  ns.print(`Training to ${level} level.`);
-
   if (ns.getPlayer().location !== city) {
     if (ns.getPlayer().money > 200000) {
+      ns.print(`Traveling to ${city}.`);
       ns.travelToCity(city);
-    } else if (locations.some((gym) => compare(gym.location, ns.getPlayer().location))) {
-      city = locations.find((gym) => compare(gym.location, ns.getPlayer().location)).city;
-      gym = locations.find((gym) => compare(gym.location, ns.getPlayer().location)).gym;
-    } else {
-      city = locations[1].city;
-      gym = locations[1].gym;
     }
   }
 
-  stat = next(ns);
-  while (ns.getPlayer()[stat] < config(`gyms.levels.${level}.${stat}`)) {
-    ns.gymWorkout(gym, stat);
-    await ns.sleep(config('gyms.training.interval'));
-    stat = next(ns);
+  if (city === locations[0].city) {
+    city = locations[0].city;
+    gym = locations[0].gym;
+  }
+
+  if (city === locations[1].city) {
+    city = locations[1].city;
+    gym = locations[1].gym;
+  }
+  if (city === locations[2].city) {
+    city = locations[2].city;
+    gym = locations[2].gym;
+  }
+  let university = config(`universities.locations.${city.replace('-', '')}`);
+
+  ns.print(`${level} training in ${city} at ${gym} & ${university}.`);
+
+  while (shouldContinue) {
+    shouldContinue = await next(ns, level, gym, university);
   }
 }
 
-function next(ns: NS): string {
-  return config('gyms.statistics').reduce((previous: string, current: string) => {
+async function next(ns: NS, level: string, gym: string, university: string): Promise<boolean> {
+  let physical = config('gyms.statistics').reduce((previous: string, current: string) => {
     return ns.getPlayer()[current] <= ns.getPlayer()[previous] ? current : previous;
   });
+
+  let mental = 'charisma'; //ns.getPlayer()['hacking'] <= ns.getPlayer()['charisma'] ? 'hacking' : 'charisma';
+
+  if (
+    ns.getPlayer()[mental] < ns.getPlayer()[physical] &&
+    ns.getPlayer()[mental] < config(`universities.levels.${level}.${mental}`)
+  ) {
+    ns.universityCourse(university, config(`universities.statistics.${mental}`));
+    await ns.sleep(config('universities.training.interval'));
+    return true;
+  }
+
+  if (ns.getPlayer()[physical] < config(`gyms.levels.${level}.${physical}`)) {
+    ns.gymWorkout(gym, physical);
+    await ns.sleep(config('gyms.training.interval'));
+    return true;
+  }
+
+  return false;
 }
