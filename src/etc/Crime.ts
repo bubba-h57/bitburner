@@ -15,4 +15,6 @@ export const crime = {
     // 'Bond Forgery',
     // 'Deal Drugs',
   ],
+  // Amount of negative karma needed to manage a gang in BitNodes other than 2
+  GangKarmaRequirement: -54000,
 };
