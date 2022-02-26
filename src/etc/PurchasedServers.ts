@@ -13,4 +13,7 @@ export const purchased_servers = {
 
   hack_set: [hack, '/lib/Helpers.js', '/lib/Term.js'],
   ram: 1048576,
+
+  target_ram: 1024,
+  use_target_ram: true,
 };

@@ -47,4 +47,11 @@ export class Crimes {
 
     this.ns.print(`${bestCrime.name} to Earn: ${cash}`);
   }
+
+  murderHobo(): void {
+    this.ns.commitCrime('Homicide');
+    let cash = formatMoney(this.ns.getCrimeStats('Homicide').money * this.ns.getBitNodeMultipliers().CrimeMoney);
+
+    this.ns.print(`Homicide to Earn: ${cash}`);
+  }
 }

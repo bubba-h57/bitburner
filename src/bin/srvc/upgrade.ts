@@ -1,8 +1,9 @@
 import { NS, Server } from 'Bitburner';
-import { formatNumberShort } from '/lib/Helpers.js';
-import { pushHackScripts, getThreadInfo, getTargets, getServerInfo } from '/lib/Servers.js';
-import { openPorts } from '/lib/Ports.js';
+import { formatNumberShort } from '/lib/Helpers';
+import { pushHackScripts, getThreadInfo, getTargets, getServerInfo } from '/lib/Servers';
+import { openPorts } from '/lib/Ports';
 import { cachedScan } from '/lib/Caching/functions';
+import { config } from '/lib/Config';
 
 export async function main(ns: NS) {
   const sleepInterval = 60000 * 0.5;
@@ -12,6 +13,7 @@ export async function main(ns: NS) {
   let needPorthack = true;
   const hackScript = '/bin/hack/hack.js';
   let scriptRamCost = ns.getScriptRam(hackScript);
+  let targetRam = 1024;
 
   ns.disableLog('ALL');
   ns.tail();
@@ -36,12 +38,16 @@ export async function main(ns: NS) {
     }
 
     // ns.print(`${new Date().toISOString()} Server.`);
-    let targetRam = minimumRam;
+
     if (ns.getServerMaxRam('home') < Math.pow(2, 20) && ns.getServerMaxRam('home') > minimumRam) {
       targetRam = ns.getServerMaxRam('home');
     }
     if (ns.getServerMaxRam('home') > Math.pow(2, 20)) {
       targetRam = Math.pow(2, 20);
+    }
+
+    if (config('purchased_servers.use_target_ram')) {
+      targetRam = config('purchased_servers.target_ram');
     }
 
     let newHost = ns.purchaseServer(purchasedServerName, targetRam);

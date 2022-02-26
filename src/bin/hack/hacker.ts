@@ -1,6 +1,6 @@
 import { NS, Server } from 'Bitburner';
-import { config } from '/lib/Config.js';
-import { getTargets, getHosts, getThreadInfo, pushHackScripts } from '/lib/Servers.js';
+import { config } from '/lib/Config';
+import { getTargets, getHosts, getThreadInfo, pushHackScripts } from '/lib/Servers';
 import { formatNumberShort } from '/lib/Helpers';
 
 export async function main(ns: NS) {
@@ -14,16 +14,18 @@ export async function main(ns: NS) {
   // Now we will crank 'em all
   for (let n = 0; n < hosts.length; n++) {
     let server = hosts[n];
-    let threads = getThreadInfo(server, scriptRamCost, targets.length);
+
     ns.print(server.hostname);
+    ns.print(`  - Killing ${config('purchased_servers.hack_script')}`);
+    await ns.scriptKill(config('purchased_servers.hack_script'), server.hostname);
+    ns.print(`  - Running ${config('purchased_servers.hack_script')}`);
+    await ns.sleep(100);
+    let threads = getThreadInfo(ns.getServer(server.hostname), scriptRamCost, targets.length);
+
     if (threads.numberOfThreadsToRun < 1) {
       ns.print(`${server.hostname} has no room for Threads.`);
       continue;
     }
-
-    ns.print(`  - Killing ${config('purchased_servers.hack_script')}`);
-    ns.scriptKill(config('purchased_servers.hack_script'), server.hostname);
-    ns.print(`  - Running ${config('purchased_servers.hack_script')}`);
 
     if (server.hostname !== 'home') {
       await pushHackScripts(ns, server);

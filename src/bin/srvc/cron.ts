@@ -5,17 +5,17 @@ export async function main(ns: NS) {
 
   let jobs = [
     {
-      script: '/bin/sudo.js',
+      script: 'bin/netw/sudo.js',
       delay: ONE_MINUTE * 20,
       lastrun: performance.now(),
     },
     {
-      script: '/bin/contractor.js',
+      script: '/bin/cntr/contractor.js',
       delay: ONE_MINUTE * 20,
       lastrun: performance.now(),
     },
     {
-      script: '/bin/hacker.js',
+      script: '/bin/hack/hacker.js',
       delay: ONE_MINUTE * 90,
       lastrun: performance.now(),
     },

@@ -124,11 +124,16 @@ export function getThreadInfo(server: Server, scriptCost: number, numberOfTarget
   let target = 0;
 
   if (targetRam > scriptCost) {
-    possible = Math.ceil(targetRam / scriptCost);
+    possible = Math.trunc(targetRam / scriptCost);
   }
 
   if (possible > numberOfTargets) {
-    target = Math.ceil(possible / numberOfTargets);
+    target = Math.trunc(possible / numberOfTargets);
+  }
+
+  if (possible === Infinity || target == Infinity) {
+    target = 0;
+    possible = 0;
   }
 
   return new ThreadInfo(possible, target, 0);
