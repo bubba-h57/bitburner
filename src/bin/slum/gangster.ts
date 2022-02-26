@@ -1,5 +1,5 @@
 import { NS } from 'Bitburner';
-import { Mafia } from '/lib/Mafia.js';
+import { Mafia } from '/lib/Mafia';
 
 export async function main(ns: NS) {
   ns.disableLog('ALL');

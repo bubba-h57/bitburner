@@ -1,6 +1,6 @@
-import { formatDuration, formatMoney } from '/lib/Helpers.js';
+import { formatDuration, formatMoney } from '/lib/Helpers';
 import { NodeStats, NS } from 'Bitburner';
-import { config } from '/lib/Config.js';
+import { config } from '/lib/Config';
 
 let formulas = true;
 let haveHacknetServers = true;

@@ -1,5 +1,4 @@
 import { NS } from 'Bitburner';
-import { cachedScan } from '/lib/Caching/functions.js';
 
 const symbols: string[] = ['', 'k', 'm', 'b', 't', 'q', 'Q', 's', 'S', 'o', 'n', 'e33', 'e36', 'e39'];
 

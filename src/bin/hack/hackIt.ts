@@ -1,5 +1,5 @@
 import { NS } from 'Bitburner';
-import { humanReadable } from '/lib/Helpers.js';
+import { humanReadable } from '/lib/Helpers';
 
 export async function main(ns: NS) {
   await configLogs(ns);

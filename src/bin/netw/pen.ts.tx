@@ -1,5 +1,5 @@
 import { NS} from "Bitburner";
-import { findPath } from "lib/Servers.js";
+import { findPath } from "lib/Servers";
 
 /** @param {NS } ns */
 export async function main(ns: NS) {

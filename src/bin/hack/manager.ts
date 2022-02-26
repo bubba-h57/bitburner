@@ -1,9 +1,9 @@
 import { NS } from 'Bitburner';
-import { millisecondsToString, getServerNames } from '/lib/Helpers.js';
+import { millisecondsToString, getServerNames } from '/lib/Helpers';
 
-const HACK_SCRIPT: string = '/bin/hack/hack.js';
-const GROW_SCRIPT: string = '/bin/hack/grow.js';
-const WEAKEN_SCRIPT: string = '/bin/hack/weaken.js';
+const HACK_SCRIPT: string = '/bin/hack/hack';
+const GROW_SCRIPT: string = '/bin/hack/grow';
+const WEAKEN_SCRIPT: string = '/bin/hack/weaken';
 
 interface iTarget {
   nextAction: string;

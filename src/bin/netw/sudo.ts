@@ -1,6 +1,6 @@
 import { NS } from 'Bitburner';
-import { getServerInfo, findPath } from '/lib/Servers.js';
-import { openPorts } from '/lib/Ports.js';
+import { getServerInfo, findPath } from '/lib/Servers';
+import { openPorts } from '/lib/Ports';
 
 export async function main(ns: NS) {
   ns.disableLog('ALL');

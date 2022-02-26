@@ -1,6 +1,6 @@
 import { NS, Server } from 'Bitburner';
 import { config } from '/lib/Config';
-import { cachedScan } from '/lib/Caching/functions.js';
+import { cachedScan } from '/lib/Caching/functions';
 
 /**
  * Get the list of servers connected to a server.

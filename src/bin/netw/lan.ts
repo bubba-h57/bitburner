@@ -1,7 +1,7 @@
 import { NS, Server } from 'Bitburner';
-import { config } from '/lib/Config.js';
-import { humanReadable } from '/lib/Helpers.js';
-import { getTargets, getThreadInfo, pushHackScripts } from '/lib/Servers.js';
+import { config } from '/lib/Config';
+import { humanReadable } from '/lib/Helpers';
+import { getTargets, getThreadInfo, pushHackScripts } from '/lib/Servers';
 
 export async function main(ns: NS) {
   let currentServers = ns.getPurchasedServers();

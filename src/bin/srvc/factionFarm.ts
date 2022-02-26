@@ -1,6 +1,6 @@
 import { NS, Server } from 'Bitburner';
-import { config } from '/lib/Config.js';
-import { getTargets, getHosts, getThreadInfo, pushHackScripts } from '/lib/Servers.js';
+import { config } from '/lib/Config';
+import { getTargets, getHosts, getThreadInfo, pushHackScripts } from '/lib/Servers';
 import { formatNumberShort } from '/lib/Helpers';
 
 export async function main(ns: NS) {

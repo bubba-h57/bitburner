@@ -1,8 +1,8 @@
 import { NS, GangGenInfo, GangMemberInfo, Gang, GangTaskStats } from 'Bitburner';
-import { nameGenerator } from '/lib/Names.js';
-import { Mobster } from '/lib/Mobster.js';
-import { Territory } from '/lib/Territory.js';
-import { formatNumberShort } from '/lib/Helpers.js';
+import { nameGenerator } from '/lib/Names';
+import { Mobster } from '/lib/Mobster';
+import { Territory } from '/lib/Territory';
+import { formatNumberShort } from '/lib/Helpers';
 export class Mafia {
   public ns: NS;
   public gang: Gang;

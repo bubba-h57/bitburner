@@ -1,6 +1,6 @@
 import { GangOtherInfo, NS } from 'Bitburner';
-import { Mafia } from '/lib/Mafia.js';
-import { formatNumberShort } from '/lib/Helpers.js';
+import { Mafia } from '/lib/Mafia';
+import { formatNumberShort } from '/lib/Helpers';
 
 export class Territory {
   protected ns: NS;

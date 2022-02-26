@@ -1,6 +1,5 @@
 import { NS } from 'Bitburner';
-import { Crimes } from '/lib/Crime.js';
-import { formatMoney } from '/lib/Helpers.js';
+import { Crimes } from '/lib/Crime';
 
 export async function main(ns: NS) {
   ns.disableLog('ALL');

@@ -1,5 +1,5 @@
 import { NS } from 'Bitburner';
-import { cachedScan } from '/lib/Caching/functions.js';
+import { cachedScan } from '/lib/Caching/functions';
 
 export async function main(ns: NS) {
   ns.tprint('home: ' + (await cachedScan(ns)));

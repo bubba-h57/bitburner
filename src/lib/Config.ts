@@ -1,10 +1,10 @@
-import { gyms } from '/etc/Gyms.js';
-import { factions } from '/etc/Factions.js';
-import { mafia } from '/etc/Mafia.js';
-import { crime } from '/etc/Crime.js';
-import { purchased_servers } from '/etc/PurchasedServers.js';
-import { hack_net } from '/etc/HackNet.js';
-import { universities } from '/etc/Universities.js';
+import { gyms } from '/etc/Gyms';
+import { factions } from '/etc/Factions';
+import { mafia } from '/etc/Mafia';
+import { crime } from '/etc/Crime';
+import { purchased_servers } from '/etc/PurchasedServers';
+import { hack_net } from '/etc/HackNet';
+import { universities } from '/etc/Universities';
 
 export function config(key: string, alternative: any = null): any | null {
   return Config.get(key, alternative);

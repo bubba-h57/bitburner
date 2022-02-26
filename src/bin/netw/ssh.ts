@@ -1,5 +1,5 @@
 import { NS } from 'Bitburner';
-import { findPath } from '/lib/Servers.js';
+import { findPath } from '/lib/Servers';
 
 export async function main(ns: NS) {
   let path = await findPath(ns, ns.args[0].toString());

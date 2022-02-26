@@ -11,7 +11,7 @@ export async function main(ns: NS) {
   const minimumRam = 8192;
   let programNames = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe'];
   let needPorthack = true;
-  const hackScript = '/bin/hack/hack.js';
+  const hackScript = config('purchased_servers.hack_script');
   let scriptRamCost = ns.getScriptRam(hackScript);
   let targetRam = 1024;
 
@@ -58,14 +58,21 @@ export async function main(ns: NS) {
       let server = ns.getServer(newHost);
       let threads = getThreadInfo(server, scriptRamCost, targets.length);
       await pushHackScripts(ns, server);
+
       let i = 0;
+
       while (threads.hasRoom() && targets.length > 0) {
         if (ns.isRunning(hackScript, server.hostname, targets[i].hostname)) {
           ns.print(`${new Date().toISOString()} WARN ${server.hostname} looped around to repeat targets.`);
           break;
         }
 
-        ns.exec(hackScript, server.hostname, threads.numberOfThreadsToRun, targets[i].hostname);
+        ns.exec(
+          config('purchased_servers.hack_script'),
+          server.hostname,
+          threads.numberOfThreadsToRun,
+          targets[i].hostname
+        );
 
         threads.incrementTotal();
         i++;

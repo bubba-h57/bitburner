@@ -1,7 +1,7 @@
 import { NS, GangMemberInfo, GangGenInfo, GangTaskStats, GangMemberAscension } from 'Bitburner';
-import { Mafia } from '/lib/Mafia.js';
-import { compare } from '/lib/Helpers.js';
-import { config } from '/lib/Config.js';
+import { Mafia } from '/lib/Mafia';
+import { compare } from '/lib/Helpers';
+import { config } from '/lib/Config';
 export class Mobster {
   protected ns: NS;
   protected mafia: Mafia;

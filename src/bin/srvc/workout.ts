@@ -1,5 +1,5 @@
 import { NS } from 'Bitburner';
-import { config } from '/lib/Config.js';
+import { config } from '/lib/Config';
 
 const argsSchema: [string, boolean][] = [
   ['initial', true],

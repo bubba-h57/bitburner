@@ -1,6 +1,6 @@
 import { CrimeStats, NS } from 'Bitburner';
-import { formatMoney } from '/lib/Helpers.js';
-import { config } from '/lib/Config.js';
+import { formatMoney } from '/lib/Helpers';
+import { config } from '/lib/Config';
 
 export interface ICrimeRisk {
   name: string;

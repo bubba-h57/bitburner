@@ -1,6 +1,6 @@
 import { NS } from 'Bitburner';
-import { getAllServers } from '/lib/Servers.js';
-import { compareNumbers, CodingContractMeta, solve } from '/lib/Contracts.js';
+import { getAllServers } from '/lib/Servers';
+import { compareNumbers, CodingContractMeta, solve } from '/lib/Contracts';
 
 export async function main(ns: NS) {
   const servers = await getAllServers(ns, 'home');

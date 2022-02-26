@@ -1,5 +1,5 @@
 import { NS } from 'Bitburner';
-import { findPath } from '/lib/Servers.js';
+import { findPath } from '/lib/Servers';
 
 export async function backdoor(ns: NS, host: string) {
   let server = ns.getServer(host);
