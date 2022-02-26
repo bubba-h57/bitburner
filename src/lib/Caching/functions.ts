@@ -12,7 +12,7 @@ import { NS } from 'Bitburner';
  * @param host - Hostname of the server to scan.
  * @returns Returns an string of hostnames.
  */
-export async function cachedScan(ns: NS, host?: string): Promise<string[]> {
+export async function XcachedScan(ns: NS, host?: string): Promise<string[]> {
   host = host ?? ns.getHostname();
   let cacheHandle = `/cache/scan.${host}.json.txt`;
   let failsafe = [];

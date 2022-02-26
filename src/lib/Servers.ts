@@ -1,6 +1,5 @@
 import { NS, Server } from 'Bitburner';
 import { config } from '/lib/Config';
-import { cachedScan } from '/lib/Caching/functions';
 
 /**
  * Get the list of servers connected to a server.
@@ -18,7 +17,7 @@ export async function getAllServers(ns: NS, rootHost = 'home'): Promise<string[]
   while (pendingScan.length) {
     const hostname: string = pendingScan.shift() ?? '';
     list.add(hostname);
-    let daScan = await cachedScan(ns, hostname);
+    let daScan = await ns.scan(hostname);
     pendingScan.push(...daScan);
     pendingScan = pendingScan.filter((host) => !list.has(host));
   }
@@ -67,7 +66,7 @@ export async function findPath(ns: NS, destination: string = '', current: string
 
   while ((hostname = queue.shift())) {
     let path = links[hostname];
-    let neighboors = await cachedScan(ns, hostname);
+    let neighboors = await ns.scan(hostname);
 
     for (let neighboor of neighboors) {
       if (links[neighboor] === undefined) {

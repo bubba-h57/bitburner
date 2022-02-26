@@ -2,7 +2,6 @@ import { NS, Server } from 'Bitburner';
 import { formatNumberShort } from '/lib/Helpers';
 import { pushHackScripts, getThreadInfo, getTargets, getServerInfo } from '/lib/Servers';
 import { openPorts } from '/lib/Ports';
-import { cachedScan } from '/lib/Caching/functions';
 import { config } from '/lib/Config';
 
 export async function main(ns: NS) {
@@ -108,7 +107,7 @@ export async function main(ns: NS) {
 }
 
 async function canShop(ns: NS): Promise<boolean> {
-  let scan = await cachedScan(ns, 'home');
+  let scan = await ns.scan('home');
   return scan.includes('darkweb');
 }
 
