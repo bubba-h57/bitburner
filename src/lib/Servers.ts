@@ -12,17 +12,17 @@ import { config } from '/lib/Config';
 export async function getAllServers(ns: NS, rootHost = 'home'): Promise<string[]> {
   ns.disableLog('scan');
   let pendingScan = [rootHost];
-  const list = new Set(pendingScan);
+  const list: string[] = [];
 
   while (pendingScan.length) {
     const hostname: string = pendingScan.shift() ?? '';
-    list.add(hostname);
+    list.push(hostname);
     let daScan = await ns.scan(hostname);
-    pendingScan.push(...daScan);
-    pendingScan = pendingScan.filter((host) => !list.has(host));
+    daScan.forEach((host) => pendingScan.push(host));
+    pendingScan = pendingScan.filter((host) => !list.includes(host));
   }
 
-  return [...list];
+  return list;
 }
 
 /**

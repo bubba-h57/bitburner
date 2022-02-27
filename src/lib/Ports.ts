@@ -20,6 +20,25 @@ export async function openPorts(ns: NS, hostname: string) {
   porthacks.forEach(async function (hack) {
     ns.disableLog(hack.apiCall);
     if (ns.fileExists(hack.filename)) {
+      switch (hack.apiCall) {
+        case 'brutessh':
+          ns.brutessh(hostname);
+          break;
+        case 'relaysmtp':
+          ns.relaysmtp(hostname);
+          break;
+        case 'ftpcrack':
+          ns.ftpcrack(hostname);
+          break;
+        case 'httpworm':
+          ns.httpworm(hostname);
+          break;
+        case 'sqlinject':
+          ns.sqlinject(hostname);
+          break;
+        default:
+          break;
+      }
       await ns[hack.apiCall](hostname);
     }
   });

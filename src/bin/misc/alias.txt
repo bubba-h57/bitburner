@@ -20,7 +20,8 @@ alias hacknet="home; run bin/hnet/manager.js";
 alias test="home; run bin/misc/test.js";
 
 alias crime="home; run bin/slum/criminal.js";
-alias gang="home; run bin/slum/gang.js";
+alias gang="home; run bin/slum/gangster.js";
+alias war="home; run bin/slum/war.js";
 alias karma="home; run bin/slum/karma.js";
 alias murderhobo="home; run bin/slum/murderHobo.js";
 

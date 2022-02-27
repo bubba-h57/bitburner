@@ -12,7 +12,7 @@ export async function main(ns: NS) {
   let needPorthack = true;
   const hackScript = config('purchased_servers.hack_script');
   let scriptRamCost = ns.getScriptRam(hackScript);
-  let targetRam = 1024;
+  let targetRam = 2048;
 
   ns.disableLog('ALL');
   ns.tail();
