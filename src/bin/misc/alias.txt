@@ -16,6 +16,8 @@ alias workout="home; run bin/srvc/workout.js";
 
 alias contracts="home; run bin/cntr/contractor.js";
 
+alias hashCash="home; run bin/hnet/hashCash.js";
+alias hashFunds="home; run bin/hnet/hashFunds.js";
 alias hacknet="home; run bin/hnet/manager.js";
 alias test="home; run bin/misc/test.js";
 

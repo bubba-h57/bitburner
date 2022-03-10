@@ -5,7 +5,7 @@ import { formatNumberShort } from '/lib/Helpers';
 
 export async function main(ns: NS) {
   ns.disableLog('ALL');
-  ns.tail();
+
   let i = 0;
   let hosts: Server[] = await getHosts(ns);
   let targets: Server[] = await getTargets(ns);

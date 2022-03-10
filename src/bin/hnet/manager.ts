@@ -35,6 +35,17 @@ export async function main(ns: NS) {
       log(ns, `Spending limit reached. Breaking...`);
       break; // Hack, but we return a non-number (false) when we've bought all we can for the current config
     }
+    if (ns.hacknet.numHashes() > 400) {
+      while (true) {
+        if (ns.hacknet.numHashes() > 100) {
+          ns.hacknet.spendHashes('Sell for Money');
+        } else {
+          break;
+        }
+        await ns.asleep(100);
+      }
+    }
+
     maxSpend -= spend;
     if (continuous) await ns.sleep(interval);
   } while (continuous);

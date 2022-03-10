@@ -52,6 +52,6 @@ export class Crimes {
     this.ns.commitCrime('Homicide');
     let cash = formatMoney(this.ns.getCrimeStats('Homicide').money * this.ns.getBitNodeMultipliers().CrimeMoney);
 
-    this.ns.print(`Homicide to Earn: ${cash}`);
+    this.ns.print(`Commiting Homicide to Earn: ${cash}`);
   }
 }

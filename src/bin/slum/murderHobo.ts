@@ -6,11 +6,22 @@ export async function main(ns: NS) {
   ns.tail();
   let timeout = 250;
   let crimes: Crimes = new Crimes(ns);
+  let $continue = ns.heart.break() >= -54000;
 
-  while (true) {
+  while ($continue) {
     await ns.sleep(timeout);
 
-    if (ns.isBusy()) continue;
+    if (ns.isBusy()) {
+      continue;
+    }
     crimes.murderHobo();
+    ns.print(`Current Karma: ${ns.heart.break()}`);
+    $continue = ns.heart.break() >= -54000;
+  }
+
+  if (ns.heart.break() <= -54000) {
+    ns.gang.createGang('Slum Snakes');
+    ns.exec('/bin/slum/gangster.js', 'home');
+    ns.spawn('/bin/slum/war.js');
   }
 }

@@ -5,7 +5,6 @@ import { openPorts } from '/lib/Ports';
 export async function main(ns: NS) {
   ns.disableLog('ALL');
   ns.enableLog('installBackdoor');
-  ns.tail();
 
   let servers = await getServerInfo(ns);
 
@@ -19,6 +18,7 @@ export async function main(ns: NS) {
     }
 
     if (server.openPortCount >= server.numOpenPortsRequired && !server.hasAdminRights) {
+      ns.tail();
       ns.print(`Nuking ${server.hostname}`);
       ns.nuke(server.hostname);
       server = ns.getServer(server.hostname);
@@ -28,6 +28,7 @@ export async function main(ns: NS) {
       if (!server.backdoorInstalled && server.requiredHackingSkill <= ns.getHackingLevel()) {
         let path = await findPath(ns, server.hostname);
         path.forEach((host: string) => ns.connect(host));
+        ns.tail();
         await ns.installBackdoor();
         path.pop();
         path.reverse();

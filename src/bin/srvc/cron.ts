@@ -1,8 +1,8 @@
 import { NS } from 'Bitburner';
 
 export async function main(ns: NS) {
-  const ONE_MINUTE = 60000;
-
+  const ONE_MINUTE = 60000 * 0.1;
+  ns.disableLog('ALL');
   let jobs = [
     {
       script: 'bin/netw/sudo.js',
@@ -19,6 +19,11 @@ export async function main(ns: NS) {
       delay: ONE_MINUTE * 90,
       lastrun: performance.now(),
     },
+    {
+      script: '/bin/hnet/sellHashes.js',
+      delay: ONE_MINUTE * 0.25,
+      lastrun: performance.now(),
+    },
   ];
 
   while (true) {
@@ -28,7 +33,8 @@ export async function main(ns: NS) {
       elapsedTime = performance.now() - jobs[index].lastrun;
 
       if (elapsedTime > jobs[index].delay) {
-        await ns.exec(jobs[index].script, 'home');
+        ns.print('Executing: ' + jobs[index].script);
+        ns.exec(jobs[index].script, 'home');
         jobs[index].lastrun = performance.now();
       }
     }

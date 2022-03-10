@@ -7,12 +7,12 @@ import { config } from '/lib/Config';
 export async function main(ns: NS) {
   const sleepInterval = 60000 * 0.5;
   const purchasedServerName = 'hacker';
-  const minimumRam = 8192;
+  const minimumRam = 256;
   let programNames = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe'];
   let needPorthack = true;
   const hackScript = config('purchased_servers.hack_script');
   let scriptRamCost = ns.getScriptRam(hackScript);
-  let targetRam = 2048;
+  let targetRam = 256;
 
   ns.disableLog('ALL');
   ns.tail();

@@ -162,9 +162,11 @@ export async function getTargets(ns: NS): Promise<Server[]> {
 
 export async function getHosts(ns: NS): Promise<Server[]> {
   let servers = await getServerInfo(ns);
-  servers = servers.filter(
-    (server) => server.purchasedByPlayer || server.hostname === 'home' || (server.hasAdminRights && server.maxRam > 0)
-  );
+  servers = servers
+    .filter(
+      (server) => server.purchasedByPlayer || server.hostname === 'home' || (server.hasAdminRights && server.maxRam > 0)
+    )
+    .filter((server) => !server.hostname.startsWith('hackne'));
   servers.sort((a, b) => b.maxRam - a.maxRam);
   return servers;
 }
