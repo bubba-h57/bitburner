@@ -6,7 +6,8 @@ export async function main(ns: NS) {
   ns.tail();
   let timeout = 250;
   let crimes: Crimes = new Crimes(ns);
-  let $continue = ns.heart.break() >= -54000;
+  let karmaTarget: number = -54000;
+  let $continue = ns.heart.break() >= karmaTarget;
 
   while ($continue) {
     await ns.sleep(timeout);
@@ -14,12 +15,12 @@ export async function main(ns: NS) {
     if (ns.isBusy()) {
       continue;
     }
-    crimes.murderHobo();
+    ns.getPlayer().strength < 100 ? crimes.muggerHobo() : crimes.murderHobo();
     ns.print(`Current Karma: ${ns.heart.break()}`);
-    $continue = ns.heart.break() >= -54000;
+    $continue = ns.heart.break() >= karmaTarget;
   }
 
-  if (ns.heart.break() <= -54000) {
+  if (ns.heart.break() <= karmaTarget) {
     ns.gang.createGang('Slum Snakes');
     ns.exec('/bin/slum/gangster.js', 'home');
     ns.spawn('/bin/slum/war.js');

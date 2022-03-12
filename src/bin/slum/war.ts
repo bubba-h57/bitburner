@@ -49,26 +49,24 @@ export async function main(ns: NS) {
 
       lastTerritoryTick = Date.now();
       nextTerritoryTick = Date.now() + tickDurration;
-      ns.print('Tick Duration: ' + tickDurration / 1000);
 
       lastEnemyGangInfo = ns.gang.getOtherGangInformation();
       lastGangInfo = ns.gang.getGangInformation();
 
       // Get Back To Work!
       ns.gang.setTerritoryWarfare(false);
-      ns.print(`Territory Power: ${formatNumberShort(lastGangInfo.power)}`);
+      ns.print(`ERROR Power: ${formatNumberShort(lastGangInfo.power, 6, 2)}`);
+      ns.print(`ERROR Territory: ${formatNumberShort(lastGangInfo.territory * 100, 6, 2)}%`);
+
       ns.gang.getMemberNames().forEach((name: string) => ns.gang.setMemberTask(name, 'Train Combat'));
-      ns.print('Train the Combat');
-      ns.print('----------------');
+      ns.print('INFO ----------------');
       wasPrepared = false;
     }
     if (Date.now() > nextTerritoryTick) {
-      ns.print('Prepare for war');
       if (weAreTheBest(ns)) {
         ns.gang.setTerritoryWarfare(true);
       }
       ns.gang.getMemberNames().forEach((name: string) => ns.gang.setMemberTask(name, 'Territory Warfare'));
-      ns.print('Engage in Territory Warfare');
       wasPrepared = true;
     }
   }

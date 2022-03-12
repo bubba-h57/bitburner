@@ -2,6 +2,14 @@ import { NS } from 'Bitburner';
 
 const symbols: string[] = ['', 'k', 'm', 'b', 't', 'q', 'Q', 's', 'S', 'o', 'n', 'e33', 'e36', 'e39'];
 
+export async function exec(ns: NS, script: string, port: number, args: (string | number | boolean)[] = []) {
+  let pid = ns.exec(`${script}.js`, 'home', 1, port, ...args);
+  while (ns.isRunning(pid, 'home')) {
+    await ns.sleep(20);
+  }
+  return JSON.parse(await ns.readPort(port));
+}
+
 /**
  * Formats a number.
  * @remarks

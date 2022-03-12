@@ -1,5 +1,5 @@
 import { CrimeStats, NS } from 'Bitburner';
-import { formatMoney } from '/lib/Helpers';
+import { exec, formatMoney } from '/lib/Helpers';
 import { config } from '/lib/Config';
 
 export interface ICrimeRisk {
@@ -22,10 +22,10 @@ export class Crimes {
     this.ns = ns;
   }
 
-  calculateRisk(): CrimeRisk[] {
-    return config('crime.activities').map((crime) => {
-      let crimeStats: CrimeStats = this.ns.getCrimeStats(crime);
-      let crimeChance: number = this.ns.getCrimeChance(crime);
+  async calculateRisk(): Promise<CrimeRisk[]> {
+    return config('crime.activities').map(async (crime: string) => {
+      let crimeStats: CrimeStats = await exec(this.ns, '/opt/crime/bin/getCrimeStats', 3, [crime]);
+      let crimeChance: number = await exec(this.ns, '/opt/crime/bin/getCrimeChance', 3, [crime]);
 
       let crimeRiskValue: number =
         (crimeStats.money * Math.log10(crimeChance / (1 - crimeChance + Number.EPSILON))) / crimeStats.time;
@@ -34,24 +34,34 @@ export class Crimes {
     });
   }
 
-  chooseBestCrime(): CrimeRisk {
-    return this.calculateRisk().reduce((prev: CrimeRisk, current: CrimeRisk) => {
+  async chooseBestCrime(): Promise<CrimeRisk> {
+    return (await this.calculateRisk()).reduce((prev: CrimeRisk, current: CrimeRisk) => {
       return prev.risk > current.risk ? prev : current;
     });
   }
 
-  commitBestCrime(): void {
-    let bestCrime = this.chooseBestCrime();
+  async commitBestCrime(): Promise<void> {
+    let bestCrime = await this.chooseBestCrime();
     this.ns.commitCrime(bestCrime.name);
-    let cash = formatMoney(this.ns.getCrimeStats(bestCrime.name).money * this.ns.getBitNodeMultipliers().CrimeMoney);
+    let stats = await exec(this.ns, '/opt/crime/bin/getCrimeStats', 3, [bestCrime.name]);
+    let cash = formatMoney(stats.money * this.ns.getBitNodeMultipliers().CrimeMoney);
 
     this.ns.print(`${bestCrime.name} to Earn: ${cash}`);
   }
 
-  murderHobo(): void {
+  async murderHobo(): Promise<void> {
     this.ns.commitCrime('Homicide');
-    let cash = formatMoney(this.ns.getCrimeStats('Homicide').money * this.ns.getBitNodeMultipliers().CrimeMoney);
+    let stats = await exec(this.ns, '/opt/crime/bin/getCrimeStats', 3, ['Homicide']);
+    let cash = formatMoney(stats.money * this.ns.getBitNodeMultipliers().CrimeMoney);
 
     this.ns.print(`Commiting Homicide to Earn: ${cash}`);
+  }
+
+  async muggerHobo(): Promise<void> {
+    this.ns.commitCrime('Mug');
+    let stats = await exec(this.ns, '/opt/crime/bin/getCrimeStats', 3, ['Mug']);
+    let cash = formatMoney(stats.money * this.ns.getBitNodeMultipliers().CrimeMoney);
+
+    this.ns.print(`Commiting Mug to Earn: ${cash}`);
   }
 }
