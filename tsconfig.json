@@ -6,14 +6,26 @@
     "baseUrl": "src/",
     "jsx": "react",
     "paths": {
-      "/lib/*": [
-        "lib/*"
+      "*": [
+        "node_modules/*",
+      ],
+      "/bin/*": [
+        "bin/*"
       ],
       "/etc/*": [
         "etc/*"
       ],
+      "/lib/*": [
+        "lib/*"
+      ],
+      "/opt/*": [
+        "opt/*"
+      ],
       "Bitburner": [
-        "../Bitburner.d.ts"
+        "types/Bitburner.d.ts"
+      ],
+      "Bubba": [
+        "types/Bubba.d.ts"
       ]
     },
     "outDir": "build/",

@@ -1,6 +1,6 @@
 import { NS, Server } from 'Bitburner';
-import { writeOutFixedLength, hasFlag } from 'lib/Term';
-import { getServerInfo } from 'lib/Servers';
+import { writeOutFixedLength, hasFlag } from '/lib/Term';
+import { getServerInfo } from '/lib/Servers';
 
 /**
  * Crawls through the entire network and presents

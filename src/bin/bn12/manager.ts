@@ -1,63 +1,68 @@
 import { NS } from 'Bitburner';
-import { Sleeve } from '/lib/Sleeve';
+import { Clone } from '/lib/Clone';
 import { BladeBurner } from '/lib/BladeBurner';
 import { Hacknet } from '/lib/Hacknet';
 import { Crimes } from '/lib/Crime';
 import { exec } from '/lib/Helpers';
 
-export async function main(ns: NS) {
+var ns: NS;
+var port: number;
+
+export async function main(bubbaNS: NS) {
+  // Sets our global NS var
+  globalThis.ns = bubbaNS;
+  // Set a global port var
+  globalThis.port = 3;
+
   let ready = true;
   let crime = 'homicide';
   let priority: number = 0;
   let numberSleeves: number = 0;
-  let sleeve = new Sleeve(ns, 1);
   let now: number = performance.now();
-  let hacknet: Hacknet = new Hacknet(ns);
-  let crimes: Crimes = new Crimes(ns);
+  let crimes: Crimes = new Crimes(globalThis.ns);
+  let hacknet: Hacknet = new Hacknet(globalThis.ns);
 
-  ns.disableLog('ALL');
-  ns.tail();
+  globalThis.ns.disableLog('ALL');
+  globalThis.ns.tail();
 
   while (ready) {
     now = performance.now();
 
     // Bitburner Work
-    if (await exec(ns, '/opt/gang/bin/inGang', 3)) {
-      if (await exec(ns, '/opt/bladeburner/bin/joinBladeburnerDivision', 3)) {
-        let bladeBurner = new BladeBurner(ns);
+    if (await exec('/opt/gang/bin/inGang')) {
+      if (await exec('/opt/bladeburner/bin/joinBladeburnerDivision')) {
+        let bladeBurner = new BladeBurner();
         bladeBurner.takeAction();
         priority = bladeBurner.upgradeSkill(priority);
       }
     } else {
       // Decrease Karma
-      if (!ns.isBusy()) {
-        (await exec(ns, '/opt/bin/getPlayer', 3)).strength < 100
-          ? await crimes.muggerHobo()
-          : await crimes.murderHobo();
-        ns.print(`Current Karma: ${ns.heart.break()}`);
+      if (!globalThis.ns.isBusy()) {
+        (await exec('/opt/bin/getPlayer')).strength < 100 ? await crimes.muggerHobo() : await crimes.murderHobo();
+        globalThis.ns.print(`Current Karma: ${globalThis.ns.heart.break()}`);
       }
-      if (ns.gang.createGang('Slum Snakes')) {
-        ns.exec('/bin/slum/gangster.js', 'home');
-        ns.exec('/bin/slum/war.js', 'home');
+      if (globalThis.ns.gang.createGang('Slum Snakes')) {
+        globalThis.ns.exec('/bin/slum/gangster.js', 'home');
+        globalThis.ns.exec('/bin/slum/war.js', 'home');
       }
     }
 
     // Sleeves Work
     crime = 'homicide';
-    numberSleeves = await sleeve.getNumSleeves();
+    numberSleeves = await Clone.numSleeves();
 
     for (let index = 0; index < numberSleeves; index++) {
-      let sleeveStats = await sleeve.getSleeveStats(index);
+      let sleeveStats = await Clone.stats(index);
 
       if (sleeveStats.shock > 0) {
-        await exec(ns, '/opt/sleeve/bin/setToShockRecovery', 3, [index]);
+        await Clone.shockRecovery(index);
         continue;
       }
 
       if (sleeveStats.strength < 100) {
         crime = 'mug';
       }
-      await exec(ns, '/opt/sleeve/bin/setToCommitCrime', 3, [index, crime]);
+      await Clone.commitCrime(index, crime);
     }
 
     // Hacknet Work
@@ -65,6 +70,6 @@ export async function main(ns: NS) {
     hacknet.upgradeForHashGain();
 
     // Sleep a moment
-    await ns.sleep(200);
+    await globalThis.ns.sleep(200);
   }
 }

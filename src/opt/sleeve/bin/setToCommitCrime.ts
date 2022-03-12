@@ -6,5 +6,9 @@ export async function main(ns: NS) {
   let name: string = ns.args[2].toString();
   let results = ns.sleeve.setToCommitCrime(sleeveNumber, name);
   ns.clearPort(port);
-  await ns.writePort(port, JSON.stringify(results));
+  try {
+    await ns.writePort(port, JSON.stringify(results));
+  } catch {
+    ns.tprint(`Port: ${port}, Sleeve: ${sleeveNumber}, Name: ${name}, Result: ${results}`);
+  }
 }

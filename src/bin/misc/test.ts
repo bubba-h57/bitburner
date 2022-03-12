@@ -1,16 +1,11 @@
 import { NS } from 'Bitburner';
-import { Sleeve } from '/lib/Sleeve';
 
-export async function main(ns: NS) {
-  let sleeve = new Sleeve(ns, 1);
-  let crime = 'homicide';
-  let numberSleeves = await sleeve.getNumSleeves();
-  for (let index = 0; index < numberSleeves; index++) {
-    let sleeveStats = await sleeve.getSleeveStats(index);
+var ns: NS;
+var port: number;
 
-    if (sleeveStats.strength < 100) {
-      crime = 'mug';
-    }
-    ns.sleeve.setToCommitCrime(index, crime);
-  }
+export async function main(bubbaNS: NS) {
+  // Sets our global NS var
+  globalThis.ns = bubbaNS;
+  // Set a global port var
+  globalThis.port = 3;
 }

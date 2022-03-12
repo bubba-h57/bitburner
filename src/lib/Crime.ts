@@ -24,8 +24,8 @@ export class Crimes {
 
   async calculateRisk(): Promise<CrimeRisk[]> {
     return config('crime.activities').map(async (crime: string) => {
-      let crimeStats: CrimeStats = await exec(this.ns, '/opt/crime/bin/getCrimeStats', 3, [crime]);
-      let crimeChance: number = await exec(this.ns, '/opt/crime/bin/getCrimeChance', 3, [crime]);
+      let crimeStats: CrimeStats = await exec('/opt/crime/bin/getCrimeStats', [crime]);
+      let crimeChance: number = await exec('/opt/crime/bin/getCrimeChance', [crime]);
 
       let crimeRiskValue: number =
         (crimeStats.money * Math.log10(crimeChance / (1 - crimeChance + Number.EPSILON))) / crimeStats.time;
@@ -43,7 +43,7 @@ export class Crimes {
   async commitBestCrime(): Promise<void> {
     let bestCrime = await this.chooseBestCrime();
     this.ns.commitCrime(bestCrime.name);
-    let stats = await exec(this.ns, '/opt/crime/bin/getCrimeStats', 3, [bestCrime.name]);
+    let stats = await exec('/opt/crime/bin/getCrimeStats', [bestCrime.name]);
     let cash = formatMoney(stats.money * this.ns.getBitNodeMultipliers().CrimeMoney);
 
     this.ns.print(`${bestCrime.name} to Earn: ${cash}`);
@@ -51,7 +51,7 @@ export class Crimes {
 
   async murderHobo(): Promise<void> {
     this.ns.commitCrime('Homicide');
-    let stats = await exec(this.ns, '/opt/crime/bin/getCrimeStats', 3, ['Homicide']);
+    let stats = await exec('/opt/crime/bin/getCrimeStats', ['Homicide']);
     let cash = formatMoney(stats.money * this.ns.getBitNodeMultipliers().CrimeMoney);
 
     this.ns.print(`Commiting Homicide to Earn: ${cash}`);
@@ -59,7 +59,7 @@ export class Crimes {
 
   async muggerHobo(): Promise<void> {
     this.ns.commitCrime('Mug');
-    let stats = await exec(this.ns, '/opt/crime/bin/getCrimeStats', 3, ['Mug']);
+    let stats = await exec('/opt/crime/bin/getCrimeStats', ['Mug']);
     let cash = formatMoney(stats.money * this.ns.getBitNodeMultipliers().CrimeMoney);
 
     this.ns.print(`Commiting Mug to Earn: ${cash}`);

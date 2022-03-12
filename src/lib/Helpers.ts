@@ -2,12 +2,26 @@ import { NS } from 'Bitburner';
 
 const symbols: string[] = ['', 'k', 'm', 'b', 't', 'q', 'Q', 's', 'S', 'o', 'n', 'e33', 'e36', 'e39'];
 
-export async function exec(ns: NS, script: string, port: number, args: (string | number | boolean)[] = []) {
-  let pid = ns.exec(`${script}.js`, 'home', 1, port, ...args);
-  while (ns.isRunning(pid, 'home')) {
-    await ns.sleep(20);
+export async function exec(script: string, args: (string | number | boolean)[] = []): Promise<any> {
+  let pid = globalThis.ns.exec(`${script}.js`, 'home', 1, globalThis.port, ...args);
+  let result: string = '';
+  let json: string = '';
+  while (globalThis.ns.isRunning(pid, 'home')) {
+    await globalThis.ns.sleep(20);
   }
-  return JSON.parse(await ns.readPort(port));
+  try {
+    result = await globalThis.ns.readPort(globalThis.port);
+    globalThis.ns.clearPort(globalThis.port);
+  } catch (error) {
+    globalThis.ns.tprint(`Error: ${error} attempting to run ${script}.js`);
+  }
+  try {
+    json = await JSON.parse(result);
+  } catch (error) {
+    globalThis.ns.tprint(`Error: ${error} attempting to parse ${result}.js after running ${script}.js`);
+  }
+
+  return json;
 }
 
 /**
